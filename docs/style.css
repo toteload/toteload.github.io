@@ -67,6 +67,7 @@ flex-direction: column;
 gap: 54px;
 margin: auto;
 max-width: var(--content-width);
+align-items: center;
 }
 
 article header {
