@@ -40,7 +40,6 @@ line-height: 1.5;
 
 h2 {
 font-size: 32px;
-padding: 0 16px;
 }
 
 section {
@@ -69,6 +68,10 @@ margin: auto;
 margin-bottom: 128px;
 max-width: var(--content-width);
 align-items: center;
+
+h2 {
+    padding: 0 16px;
+}
 }
 
 article header {
