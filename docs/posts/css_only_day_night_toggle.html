@@ -5,17 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
         <title>An animated, CSS-only day/night toggle</title>
         <link href="/style.css" rel="stylesheet"/>
+        <script src="/image-comparison-slider.js"></script>
         <link href="/posts/css_only_day_night_toggle/toggle.css" rel="stylesheet" />
     </head>
     <body>
         <header id="main-header">
+            <div id="nav-row">
+            <img src="/assets/tinyfrogsticker.png" />
             <nav id="top-nav">
                 <a class="nav-button" href="/">Home</a>
                 <div id="nav-buttons">
                     <a class="nav-button" href="/posts">Posts</a>
                 </div>
             </nav>
-            <img alt="Big frog" src="/assets/bigfrog_sticker_smaller.png" />
+            </div>
+            <div id="banner" />
         </header>
         <article>
     <header>
@@ -25,17 +29,40 @@
             <span>Publish date</span><time>16-10-2023</time><span>DD-MM-YYYY</span>
         </div>
     </header>
-    <input class="theme-toggle" type="checkbox" /><section><h2>The toggle</h2><p>I made a fancy looking toggle switch that can switch from day to night.
-Originally, I made it to be used as toggle for switching between dark and light mode for a website from work.
-However, in the end we didn&#39;t use it because it was <em>too</em>fancy which didn&#39;t match the overall style.
+    <input class="theme-toggle" type="checkbox" /><section>
+<h2>The toggle</h2>
+
+<p>
+I made a fancy toggle switch that can switch from day to night (enlarged on this page so you can see it better).
+Originally, I made it to be used for switching between dark and light mode for a website from work.
+However, in the end we didn&#39;t use it because it was <em>too</em> fancy which didn&#39;t match the overall style.
 In HTML the toggle is just <code class="code-inline">&lt;input class=&quot;theme-toggle&quot; type=&quot;checkbox&quot; /&gt;</code>. All the
-styling and animation is done (ab)using CSS. It could maybe use some cleaning up, but I am not interested
+styling and animation is done (ab)using CSS. It could use some cleaning up, but I am not interested
 on working on it anymore :) Still, I find it pretty unique so I wanted to show it off.
-</p><p>Apart from the stars everything is drawn using circles. The round button (sun or moon) is a square CSS pseudo-element
+</p>
+
+<p>
+Apart from the stars everything is drawn using circles. The round button (sun or moon) is a square CSS pseudo-element
 that had its corners rounded to make it a circle. Every other circle is a just a box shadow of this element.
 The stars are created with another pseudo-element where the contents are a Unicode symbol 🟄 (U+1F7C4).
-That star is then copied using box shadows.
-</p></section>
+That star is then copied using box shadows. If you don&#39;t see a four-pointed star, then your browser font
+doesn&#39;t include this symbol. Sorry!
+</p>
+</section><div class="cmp-slider" style="width:426px; height:426px;">                      <div class="cmp-img cmp-left"><img draggable="false" src="/posts/css_only_day_night_toggle/chrome_box_shadow.png" /></div>                      <div class="cmp-img cmp-right"><img draggable="false" src="/posts/css_only_day_night_toggle/firefox_box_shadow.png" /></div>                      <div class="cmp-divider"></div>                      </div><section>
+<h2>Browser differences</h2>
+
+<p>
+I tested the toggle in Firefox and Chrome, and found some differences. 
+Chrome annoyingly stopped rendering the dark circle of the moon at certain zoom levels.
+But what I found really interesting is that the two browsers determine box shadow shapes differently!
+Firefox renders the bigger box shadows of the circle as bigger circles, where as Chrome renders the
+bigger box shadows as bigger squares with rounded corners. 
+I don&#39;t know if there is an official spec for this, but I find Firefox&#39;s behaviour to be more intuitive.
+I expect the shape of the box shadow to be the same as the shape of the source element.
+In the image above you can drag the divider to see the difference between Chrome (left) and Firefox (right).
+</p>
+
+</section>
 </article>
 
     </body>
