@@ -266,6 +266,7 @@ height: 100%;
 div.cmp-img img {
 position: absolute;
 user-select: none;
+height: inherit;
 }
 
 div.cmp-left {
