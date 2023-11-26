@@ -7,8 +7,6 @@ function registerSlider(slider) {
         let {x, y, width} = slider.getBoundingClientRect();
         let sx = Math.max(0, Math.min(width-1, Math.round(e.clientX - x)));
 
-        console.log(x, y, width, sx, e.clientX);
-
         left.style.width = sx + 'px';
         right.style.width = (width - sx) + 'px';
         divider.style.left = sx + 'px';
