@@ -140,7 +140,7 @@ margin: 0px auto 24px;
 }
 
 #banner {
-height: 48px;
+height: 24px;
 width: 100%;
 background: var(--dark-color);
 }
@@ -153,7 +153,7 @@ flex-wrap:wrap;
 
 .nav-button {
 padding: 4px 8px;
-border-radius: 4px;
+border-radius: 8px;
 box-sizing: border-box;
 }
 
@@ -199,10 +199,6 @@ a:hover {
 margin: auto;
 max-width: var(--content-width);
 padding: 0 16px;
-}
-
-#index-content h1 {
-margin-bottom: 32px;
 }
 
 #index-intro p {
