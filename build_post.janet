@@ -58,9 +58,9 @@
   (fn [buf]
     (buffer/push 
       buf
-      (string/format "<div class=\"cmp-slider\" style=\"width:min(100%%, %dpx); aspect-ratio:1;\">
-                      <div class=\"cmp-img cmp-left\"><img draggable=\"false\" src=\"%s\" /></div>
-                      <div class=\"cmp-img cmp-right\"><img draggable=\"false\" src=\"%s\" /></div>
+      (string/format "<div class=\"cmp-slider\" style=\"width:min(100%%, %dpx); aspect-ratio:1/1;\">
+                      <div class=\"cmp-img cmp-left\"><img draggable=\"false\" src=\"%s\" alt=\"TODO\"></div>
+                      <div class=\"cmp-img cmp-right\"><img draggable=\"false\" src=\"%s\" alt=\"TODO\"></div>
                       <div class=\"cmp-divider\"></div>
                       </div>" width left right))))
 
@@ -110,10 +110,11 @@
 
   (defn css-link-html [css-filename]
     (let [href (string "/posts/" name "/" css-filename)]
-      (string/format "<link href=\"%s\" rel=\"stylesheet\" />" href)))
+      (string/format "<link href=\"%s\" rel=\"stylesheet\">" href)))
 
   (let [post-html    (util/slurpr "snippets/post.html")
         publish-date (string/join [day month year] "-")
+        publish-datetime (string/join [year month day] "-")
         css-html     (string ;(->> includes 
                                 (filter |(string/has-suffix? ".css" $))
                                 (map css-link-html)))
@@ -122,6 +123,7 @@
                        "")
         body-html    (util/patch-html post-html {:title        title 
                                                  :publish-date publish-date 
+                                                 :publish-datetime publish-datetime
                                                  :tags         tags-html
                                                  :content      body})
         layout       (util/slurpr "snippets/base.html")
