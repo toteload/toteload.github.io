@@ -33,6 +33,8 @@ rule copy_file
 
 build $OUT_DIR/assets/style.css: copy_file assets/style.css
 build $OUT_DIR/assets/favicon.png: copy_file assets/favicon.png
+build $OUT_DIR/assets/home-default.png: copy_file assets/home-default.png
+build $OUT_DIR/assets/home-hover.png: copy_file assets/home-hover.png
 build $OUT_DIR/assets/image-comparison-slider.js: copy_file assets/image-comparison-slider.js
 build $OUT_DIR/CNAME: build_cname
 
