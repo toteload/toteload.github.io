@@ -23,9 +23,11 @@
         <article>
     <header>
         <h1>An animated, CSS-only day/night toggle</h1>
-        <div id="tags"><span class="tag">css</span><span class="tag">programming</span></div>
         <div id="published">
-            <span>Publish date</span><time datetime="2023-10-16">16-10-2023</time><span>DD-MM-YYYY</span>
+            <span id="publish-date">
+                <span>Published on </span><time datetime="2023-10-16" class="date">16-10-2023</time>
+            </span>
+            <span id="publish-format">(date is in format <span class="date">DD-MM-YYYY</span>)</span>
         </div>
     </header>
     <input class="theme-toggle" type="checkbox" /><section>
