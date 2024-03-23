@@ -1,3 +1,9 @@
 .gitconfig
 build.ninja
 .ninja_log
+posts/
+desert_runner/
+assets/
+snippets/
+todo.txt
+*.janet

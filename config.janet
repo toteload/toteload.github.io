@@ -1,1 +1,0 @@
-(def posts-directory "posts")
