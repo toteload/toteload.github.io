@@ -1,6 +1,7 @@
 .gitconfig
 build.ninja
 .ninja_log
+server.bat
 posts/
 desert_runner/
 assets/
