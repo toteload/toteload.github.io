@@ -1,10 +1,4 @@
-.gitconfig
 build.ninja
 .ninja_log
-server.bat
-posts/
-desert_runner/
-assets/
-snippets/
-todo.txt
-*.janet
+__pycache__
+posts/*.json

@@ -1,0 +1,33 @@
+#code-input {
+box-sizing: border-box;
+background: white;
+padding: 12px 20px;
+border: 2px solid var(--link-color);
+border-radius: 12px;
+overflow-x: scroll;
+width: 100%;
+font-size: 16px;
+resize: vertical;
+}
+
+.out {
+white-space: pre;
+font-family: monospace;
+padding: 12px 20px;
+border: 1px solid #b8b8b8;
+border-radius: 12px;
+width: 100%;
+box-sizing: border-box;
+overflow-x: scroll;
+background: white;
+}
+
+#outVars {
+}
+
+#outEquations {
+}
+
+#outSubstitutions {
+}
+
