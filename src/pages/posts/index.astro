@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import BasicLayout from '../../layouts/BasicLayout.astro';
+import PostEntry from '../../components/PostEntry.astro';
+
+const posts = await getCollection('posts');
+---
+
+<BasicLayout title="Posts">
+  <ul>
+    {
+      posts.map(({ id, data: { title } }) => (
+        <li>
+          <PostEntry title={title} id={id} />
+        </li>
+      ))
+    }
+  </ul>
+</BasicLayout>

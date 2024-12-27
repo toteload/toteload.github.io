@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+  id: string;
+  publishDate?: string;
+}
+
+import Link from './Link.astro';
+
+const { title, id, publishDate } = Astro.props;
+---
+
+<Link href={`/posts/${id}`}>
+  {title}
+</Link>

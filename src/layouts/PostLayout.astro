@@ -1,0 +1,23 @@
+---
+import BasicLayout from './BasicLayout.astro';
+
+const { title } = Astro.props;
+---
+
+<style is:global>
+  article h1 {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+
+  article h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+</style>
+
+<BasicLayout title={title}>
+  <article class="flex flex-col gap-4">
+    <slot />
+  </article>
+</BasicLayout>

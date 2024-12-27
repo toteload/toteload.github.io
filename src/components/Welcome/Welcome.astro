@@ -1,0 +1,36 @@
+---
+import { Picture } from 'astro:assets';
+import Link from '../Link.astro';
+import face from './face.png';
+---
+
+<div class="flex flex-col gap-8">
+  <Picture
+    src={face}
+    formats={['png']}
+    loading="eager"
+    alt="Simple drawing of my face with a big nose."
+    pictureAttributes={{
+      style: 'image-rendering: pixelated;',
+      class: 'flex flex-col mt-4 items-center',
+    }}
+  />
+  <div class="flex flex-col gap-4 min-w-80">
+    <p>
+      Hello, my name is David Bos and this is my website! The drawing is an
+      artistic rendition of me. The receding hairline is accurate, but my nose
+      is not actually that big in real life. It's even bigger.
+    </p>
+    <p>
+      I like video games, visual art, programming, puzzles and everything in
+      between. Programming-wise my interests are mainly graphics- and game
+      programming, compilers and interpreters, but also programming language
+      design. But really I find almost everything game and computer related
+      interesting 😄
+    </p>
+    <p>
+      Check out some of <Link href="/posts">my posts</Link>! There should be at
+      least one.
+    </p>
+  </div>
+</div>
