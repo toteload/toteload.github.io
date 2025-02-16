@@ -1,0 +1,209 @@
+---
+title: 'A C-like language with a TypeScript-like type system and refinement types'
+publishDate: '16-02-2025'
+isDraft: true
+---
+
+import Link from '@/components/Link.astro';
+
+First, the ideas presented are not fleshed out, and it could be that they are not doable when you try to implement things.
+They are vague ideas or features for a programming language.
+
+The philosophy behind the ideas is improving safety by stricter compiler checking and letting a programmer express relations between data rather
+than restricting allowable actions in a language.
+
+I start with shortly explaining what I mean with refinement types and a TypeScript-like type system followed by a few examples of what these features
+could enable a programmer to express. 
+
+## What is a refinement type?
+
+A [refinement type](https://en.wikipedia.org/wiki/Refinement_type) is a type with a a predicate attached to it that holds for every value of this type.
+
+Rust is not a language that has user-definable refinement types, but you can find some examples of refinements in the standard library, like `NonZero` and `NonNull`.
+The [documentation for NonZero](https://doc.rust-lang.org/std/num/struct.NonZero.html) mentions that `NonZero` can result in memory optimization.
+For example, `Option<NonZero<u32>>` is the same size as `u32` because the compiler is able to use 0 to mean `None`. 
+This is great! However, I think it is a shame that it is not possible to describe such optimizations ourselves.
+It is not uncommon to have integer variables where not every value is valid.
+The excess values could be used for something else, but you cannot express this.
+
+[Wuffs](https://github.com/google/wuffs) is a memory-safe programming language that does have refinement types.
+Wuffs is a small language and meant to write decoders and encoders in.
+It is safe with respect to buffer overflows, integer arithmetic overflows and null pointer dereferences.
+All these checks are done at _compile time_.
+For integer variables the compiler understands what values it can have and thus if addition might result in an overflow or not.
+
+## What is a TypeScript-like type system?
+
+[Flow-sensitive typing](https://en.wikipedia.org/wiki/Flow-sensitive_typing) (or flow typing) is something I came into contact with at work using [TypeScript](https://www.typescriptlang.org/).
+A type system with flow typing can refine the type of a variable through the flow of a program.
+
+Below is a documented Typescript snippet to showcase flow typing and union types.
+You can run it in the TypeScript playground [here](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAcgrgWwEYQE4HlUGVioJYB2A5lALxQGIqpQA+UAzroUQNwBQ7AZnAQMbA8AewJQA7gAsAhsACSDWcAAUADwBcsKmkw58xAJRQA3uyhQA9OagBBYFGAS8DKGCGE7KqHyFwANgBMoFCgpCi0aIRpQpj0iABpGQj5oMWhpADdoAiFgUwsrQgZIAQhAzxAIYAA6TjM8LiglUEghBs9SDqgAchiWLsMTMzNLKFlRBycg1Cl+CSgAFXAIBj58MDtefzQmGf9nBxkoTz4ZqBFfECDoaOZiGryzbwIGIV8IKt8hIiUuz0mb2L9DhDKCoSpwVAEYFQAC+tXyowaqVBECkfDmE2crnc9gkEFEnjEUmc2TsAJYCReRy8p3Ol2CoUoyDQNWGVkWkBWazs-yQb3sQkYzDALikqDsrVx0Ga0AYSRS0EgqC4kQQpRCoN4gjVXjxfAA1nkRsBBVJfJ8xLinKx7MtBMQoPUpfYlmc2o7nOSHZEKDl7nUGk0lpL2p0ukzqP1jA8vCIXm8Pl8fn9PWFmaggTGwcAIVC8nCjVZZEjoGC0RjHFi3AQ7A58dSiSSIHg61EhbFfW2I2g4oXxI50YwJD4AhQIJkaNIwJBRE66y5UF9pggPeIIOaXZB-P6EQRx2hV9FingzZv3n3FFA1TN9tI7NkzuthKIIConMBnJLJIdMWfY35AhQHcRmLNcoH8PBAlJKBX2kOAmDwTILl1CADRgidLlcBg5T5aB0jFE8az7A4PH-UdgjrcY8RCbC8CIAg1RrK4LXEEdAOuM8+3RVD9RYGDUEXVAqigABNHwaXGVBLl-EAfFQBh1waJBLgQKReOIPt4HTHRbhIchuxoehegdegkCEV5UQIVlY2eOwAH1YKkeDBEyPdsIAYT1fUND3CcyCODgL1EUIwEXJVkJlQJQqXKQV1-BhhwAsc-NC9xrKeeN3k+b4ACIAHU7ygDJoFkuBwJECAAH4AEIcv0DgCwyuwQA0LTqB0jtyC6PFzSELoOG-OQFGUEB6s4EZ5krVcOQgLBVjwdYoBVGgcoAMTgNDSuEgARQVBtGW0N1KgVyqqHL2EG+RFCULgzQUmioF4fVsjEYLnDa7RsF0+qgA).
+
+```typescript
+type NumberOrString = number | string;
+
+function whatIsIt(x: NumberOrString) {
+  // At this point x could be a number or a string, since we have not
+  // inspected x yet.
+
+  if (typeof x === 'string') {
+    // In this branch Typescript understands that x can only be a string.
+
+    console.log('x is a string');
+    return;
+  }
+
+  // If we reach this point then x was not a string, so x can only be a number.
+  // Typescript is able to strip part of the type since we performed a runtime check
+  // to allow this; testing if the type of x is a string or not.
+
+  if (typeof x === 'number') {
+    console.log('x is a number');
+    return;
+  }
+
+  // If we reach this point then x was neither a string nor a number,
+  // which should never happen if the program is well typed.
+
+  // Below is an assignment to a variable with type never.
+  // never is a special type.
+  // It means that no option exists of what this type could be.
+
+  // If we did not exhaustively check every possible variant
+  // that x could be then the assignment below would be a type
+  // checking error. You can try this yourself by making
+  // NumberOrString = number | string | boolean
+  const _exhaustivenessCheck: never = x;
+
+  // In a properly typed program this should never print.
+  console.log("What have you done?!");
+}
+
+const y: NumberOrString = 'hello';
+whatIsIt(y);
+
+// This is TypeScript for "Frick you. Just do the type cast."
+whatIsIt(false as unknown as NumberOrString);
+```
+
+## Application to existing work
+
+There is a [PyPy blog post](https://morepypy.blogspot.com/2015/01/faster-more-memory-efficient-and-more.html) explaining their then new dictionary design (it's a post from 2015).
+Their design is not important here, just know that it uses an array of integers (`sparse_array`) as indices into another array (`compact_array`).
+The value of the indices can only be as large as the size of the dictionary (`num_items`).
+So, if the dictionary has fewer than 255 entries, then using 8-bit indices is sufficient.
+When the dictionary grows beyond this size you would need at least 16-bit integers, etc.
+
+```c
+struct dict {
+    long num_items;
+    variable_int *sparse_array;
+    dict_entry *compact_array;
+}
+```
+
+This means that the *actual* type (a 8-bit, 16-bit or 32-bit integer) of `variable_int` depends on the value of `num_items`.
+You cannot express this relationship between variables in C or C++, but you could in a TypeScript-like C.
+
+```
+type small_dict = struct {
+    u32(0..(2**8)) num_items;
+    u8 *sparse_array;
+    dict_entry *compact_array;
+};
+
+type medium_dict = struct {
+    u32((2**8)..(2**16)) num_items;
+    u16 *sparse_array;
+    dict_entry *compact_array;
+};
+
+type big_dict = struct {
+    u32((2**16)..(2**32)) num_items;
+    u32 *sparse_array;
+    dict_entry *compact_array;
+};
+
+type dict = small_dict | medium_dict | big_dict;
+```
+
+In the example the `dict` comes in three variaties with either 8-bit, 16-bit or 32-bit indices.
+You can differentiate between the three by inspecting the value of `num_items`.
+The syntax of `u32(lo..hi)` is a meant as a refinement on `u32`, where its value must lie in the range `lo..hi`.
+
+You still have to check at runtime what kind of dictionary you are dealing with, but you would have to do this anyway.
+This does not incur extra cost, but the compiler can check if you are not accidentally assuming you are dealing
+with a `small_dict` without having done the necessary checks.
+
+Other examples that also fall into the category of different interpretation of memory depending on some bit of data are
+NaN-boxing and Small String Optimization (SSO).
+
+## Other bits
+
+### Safely growing a vector
+
+This example requires a little bit more context than the other examples.
+
+```rust
+let mut a: Vec<i32> = Vec::with_capacity(8);
+
+a.push(1);
+a.push(2);
+a.push(3);
+
+let b: &i32 = &a[0];
+
+a.push(4); // <- Very naughty!
+```
+
+In Rust it is illegal to hold a reference to a `Vec` element and then push an element.
+You are holding an immutable reference and then try to mutably borrow it.
+However, this is safe if the push does not trigger a reallocation.
+Even if you check for this you are not allowed to push while holding a reference.
+Annoying!
+
+If you could overload a function based on a refinement, then you could define a version of `push` that does not require a mutable borrow!
+That is a big if, but a man can dream.
+
+```rust
+fn push(&self, x: T) where self.len < self.cap {
+    // Party time! We can push x without having to reallocate.
+    // ...
+}
+
+fn push(&mut self, x: T) {
+    // ...
+}
+```
+
+### Alignment through address refinement
+
+Alignment requirements can be expressed through refinement predicates on addresses.
+In the pseudocode `address` is an implicitly available variable that represents the address value of a value of the type. 
+
+```
+type Int64 = [8]u8 where (address % 8 == 0);
+```
+
+Maybe on some embedded systems you have ranges of memory that are reserved for certain purposes.
+For example, the Game Boy has 8 KiB of VRAM mapped to memory range 0x8000-0xA000.
+It is possible to define pointers that are only allowed to point to VRAM.
+
+```
+type VRAMByte = u8 where (address >= 0x8000 && address < 0xA000);
+type VRAMPointer = *VRAMByte;
+```
+
+If the program is well typed, you could never accidentally read or write outside of VRAM when using a `VRAMPointer`.
+
+## Bending the rules
+
+OK so everything is safe and stuff. Great!
+
+## Afterthoughts
+
+What I like about this conceptual programming language is that it is not a big
+departure from conventional imperative languages, while still allowing the programmer
+to express their intent more precisely.
+I have not seen a programming language that is quite like this, and I think this allows you to express some

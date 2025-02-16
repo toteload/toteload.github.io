@@ -1,14 +1,14 @@
 ---
-import PostLayout from '../../layouts/PostLayout.astro';
+import PostLayout from '@/layouts/PostLayout.astro';
 
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection('posts');
-  return posts.map((p) => ({
-    params: { id: p.id },
-    props: { post: p },
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
   }));
 }) satisfies GetStaticPaths;
 
@@ -21,11 +21,19 @@ function toDatetimeAttributeFormat(d: string) {
 
 const { post } = Astro.props;
 
+const { title, publishDate, isDraft } = post.data;
+
 const { Content } = await render(post);
 ---
 
-<PostLayout title={post.data.title}>
-  <h1>{post.data.title}</h1>
-  <span>Published on <date datetime={toDatetimeAttributeFormat(post.data.publishDate)}>{post.data.publishDate}</date></span>
+<PostLayout title={title}>
+  <h1>{title}</h1>
+  <span>Published on <date datetime={toDatetimeAttributeFormat(publishDate)}>{publishDate}</date></span>
+  <hr />
+  {isDraft && 
+  <Fragment>
+    <p class="text-2xl">👷🚧 THIS POST IS IN DRAFT AND A WORK IN PROGRESS 🚧</p>
+    <hr />
+  </Fragment>}
   <Content />
 </PostLayout>
