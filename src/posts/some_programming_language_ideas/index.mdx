@@ -1,21 +1,21 @@
 ---
-title: 'A C-like language with a TypeScript-like type system and refinement types'
-publishDate: '16-02-2025'
-isDraft: true
+title: "Some programming language ideas"
+publishDate: '21-02-2025'
 ---
 
 import Link from '@/components/Link.astro';
 
-First, the ideas presented are not fleshed out, and it could be that they are not doable when you try to implement things.
-They are vague ideas or features for a programming language.
+This post is me writing down some ideas for programming languages or programming language features.
+Mainly to get them out of my head into the world without having to write an actual compiler for them 😅
+I start by providing some context and then present my ideas.
+Hopefully it's interesting.
 
-The philosophy behind the ideas is improving safety by stricter compiler checking and letting a programmer express relations between data rather
-than restricting allowable actions in a language.
+## Explanation of existing concepts
 
-I start with shortly explaining what I mean with refinement types and a TypeScript-like type system followed by a few examples of what these features
-could enable a programmer to express. 
+Here are a few short explanations and references to existing concepts that I refer to later on.
+The explanations are meant to give you _some_ intuition about them if you are not at all familiar with them.
 
-## What is a refinement type?
+### Refinement types
 
 A [refinement type](https://en.wikipedia.org/wiki/Refinement_type) is a type with a a predicate attached to it that holds for every value of this type.
 
@@ -26,13 +26,15 @@ This is great! However, I think it is a shame that it is not possible to describ
 It is not uncommon to have integer variables where not every value is valid.
 The excess values could be used for something else, but you cannot express this.
 
+### Strict compile time safety
+
 [Wuffs](https://github.com/google/wuffs) is a memory-safe programming language that does have refinement types.
 Wuffs is a small language and meant to write decoders and encoders in.
 It is safe with respect to buffer overflows, integer arithmetic overflows and null pointer dereferences.
 All these checks are done at _compile time_.
 For integer variables the compiler understands what values it can have and thus if addition might result in an overflow or not.
 
-## What is a TypeScript-like type system?
+### Flow typing and union types
 
 [Flow-sensitive typing](https://en.wikipedia.org/wiki/Flow-sensitive_typing) (or flow typing) is something I came into contact with at work using [TypeScript](https://www.typescriptlang.org/).
 A type system with flow typing can refine the type of a variable through the flow of a program.
@@ -54,9 +56,10 @@ function whatIsIt(x: NumberOrString) {
     return;
   }
 
-  // If we reach this point then x was not a string, so x can only be a number.
-  // Typescript is able to strip part of the type since we performed a runtime check
-  // to allow this; testing if the type of x is a string or not.
+  // If we reach this point then x was not a string, so x can only 
+  // be a number. Typescript is able to strip part of the type since
+  // we performed a runtime check to allow this; testing if the type
+  // of x is a string or not.
 
   if (typeof x === 'number') {
     console.log('x is a number');
@@ -87,12 +90,16 @@ whatIsIt(y);
 whatIsIt(false as unknown as NumberOrString);
 ```
 
-## Application to existing work
+## Some ideas!
+
+Here are some ideas for features in programming languages.
+
+### Type refinement + union types on C-like structs
 
 There is a [PyPy blog post](https://morepypy.blogspot.com/2015/01/faster-more-memory-efficient-and-more.html) explaining their then new dictionary design (it's a post from 2015).
 Their design is not important here, just know that it uses an array of integers (`sparse_array`) as indices into another array (`compact_array`).
 The value of the indices can only be as large as the size of the dictionary (`num_items`).
-So, if the dictionary has fewer than 255 entries, then using 8-bit indices is sufficient.
+So, if the dictionary has fewer than 256 entries, then using 8-bit indices is sufficient.
 When the dictionary grows beyond this size you would need at least 16-bit integers, etc.
 
 ```c
@@ -104,7 +111,7 @@ struct dict {
 ```
 
 This means that the *actual* type (a 8-bit, 16-bit or 32-bit integer) of `variable_int` depends on the value of `num_items`.
-You cannot express this relationship between variables in C or C++, but you could in a TypeScript-like C.
+You cannot express this relationship between variables in C or C++, but you could with union types and refinement.
 
 ```
 type small_dict = struct {
@@ -131,6 +138,7 @@ type dict = small_dict | medium_dict | big_dict;
 In the example the `dict` comes in three variaties with either 8-bit, 16-bit or 32-bit indices.
 You can differentiate between the three by inspecting the value of `num_items`.
 The syntax of `u32(lo..hi)` is a meant as a refinement on `u32`, where its value must lie in the range `lo..hi`.
+The double star `**` means "to the power of", so `2**8` is 256.
 
 You still have to check at runtime what kind of dictionary you are dealing with, but you would have to do this anyway.
 This does not incur extra cost, but the compiler can check if you are not accidentally assuming you are dealing
@@ -139,11 +147,17 @@ with a `small_dict` without having done the necessary checks.
 Other examples that also fall into the category of different interpretation of memory depending on some bit of data are
 NaN-boxing and Small String Optimization (SSO).
 
-## Other bits
+Also, this construction can be used to implement Rust-like enums yourself!
+Rust enums are implemented as tagged unions (as far as I know).
+Tagged unions are also used in TypeScript and with flow typing you can check if all variaties are handled.
+No explicit compiler support has to be written for enums and exhaustiveness checking.
 
-### Safely growing a vector
+### Refinement based function overloading
 
-This example requires a little bit more context than the other examples.
+This is an idea I had for Rust.
+Or at least for a language that does some form of lifetime analysis.
+The example below is for Rust and shows creating a `Vec` with a capacity of 8.
+A few elements are pushed, a reference to an element is taken and then an attempt is made to push again.
 
 ```rust
 let mut a: Vec<i32> = Vec::with_capacity(8);
@@ -154,21 +168,25 @@ a.push(3);
 
 let b: &i32 = &a[0];
 
-a.push(4); // <- Very naughty!
+a.push(4); // <- Highly illegal! You could go to jail for this (not really)
 ```
 
 In Rust it is illegal to hold a reference to a `Vec` element and then push an element.
 You are holding an immutable reference and then try to mutably borrow it.
-However, this is safe if the push does not trigger a reallocation.
-Even if you check for this you are not allowed to push while holding a reference.
+The reason you need to mutably borrow the `Vec` for a push is that the underlying data where the elements are stored might move.
+If a `Vec` has no space left for a new element it has to move the elements to a place with more room for new elements.
+
+However, in this example the push will not result in such a relocation so the reference will still be valid afterwards. 
+Even if you check that the `Vec` has spare room you are not allowed to push while holding a reference.
 Annoying!
 
-If you could overload a function based on a refinement, then you could define a version of `push` that does not require a mutable borrow!
-That is a big if, but a man can dream.
+If you could overload a function based on a refinement, then you could define a version of `push` that does not require a mutable borrow,
+and the usage would look no different!
+That is a big if however 😄
 
 ```rust
 fn push(&self, x: T) where self.len < self.cap {
-    // Party time! We can push x without having to reallocate.
+    // Yay, we can push x and all references are safe!
     // ...
 }
 
@@ -177,13 +195,21 @@ fn push(&mut self, x: T) {
 }
 ```
 
-### Alignment through address refinement
+Even if overloading would not be possible you could still define another version of `push` that only can be called if you know that there is enough room.
+
+```rust
+fn push_safe(&self, x: T) where self.len < self.cap {
+  // ...
+}
+```
+
+### Refinement on memory addresses
 
 Alignment requirements can be expressed through refinement predicates on addresses.
-In the pseudocode `address` is an implicitly available variable that represents the address value of a value of the type. 
+In the pseudocode `address` is an implicitly available variable that represents the address of a value of the type. 
 
 ```
-type Int64 = [8]u8 where (address % 8 == 0);
+type Int64 = [8]u8 where (address % 8 == 0); // Must be 8 byte aligned
 ```
 
 Maybe on some embedded systems you have ranges of memory that are reserved for certain purposes.
@@ -197,13 +223,28 @@ type VRAMPointer = *VRAMByte;
 
 If the program is well typed, you could never accidentally read or write outside of VRAM when using a `VRAMPointer`.
 
-## Bending the rules
+### Checked bending of the rules
 
-OK so everything is safe and stuff. Great!
+Assume you have a language like Wuffs that can guarantee compile time safety for certain issues like integer arithmetic overflow.
+This safety does come at a cost.
+In order to guarantee that an addition will not overflow you need to check that the integer is below a certain value, for example.
+Or to be sure that indexing an array will not be out of bounds you need to check the index value.
+For this last case Rust enables out of bounds access checks for `Vec`s in debug builds, but disables them for release builds.
 
-## Afterthoughts
+What you could do is introduce a special function called `assume` that can be given a predicate and
+the compiler will pretend that you did the necessary checks to make the predicate true.
 
-What I like about this conceptual programming language is that it is not a big
-departure from conventional imperative languages, while still allowing the programmer
-to express their intent more precisely.
-I have not seen a programming language that is quite like this, and I think this allows you to express some
+```rust
+fn index(&self, i: uint) {
+  assume(i < self.len);
+
+  // We can now index data
+  return self.data[i];
+}
+```
+
+When you add an assumption that turns out to not actually be true you will have introduced a bug.
+But you can more easily find the bug because all your assumptions have been written down in code!
+For debug builds you can turn the calls to `assume` into `assert` and find the problem.
+
+`assume` is essentially a `debug_assert` except that it also ties in to the flow typing of the language.

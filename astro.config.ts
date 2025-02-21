@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
+import GithubSlugger from 'github-slugger';
 
 const codePreTransformer = {
   pre(hast) {
@@ -12,7 +13,7 @@ const codePreTransformer = {
 };
 
 // remark plugin that replaces markdown links with my own Link component.
-function remarkUseLinkComponent(options) {
+const remarkUseLinkComponent = (options) => {
   return function (root) {
     if (root.type !== 'root') {
       return;

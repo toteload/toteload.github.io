@@ -4,13 +4,45 @@ import BasicLayout from '@/layouts/BasicLayout.astro';
 import PostEntry from '@/components/PostEntry.astro';
 
 const posts = await getCollection('posts');
+
+function parseDate(d: string): {year: number; month: number; day: number} {
+  const year = parseInt(d.slice(-4));
+  const month = parseInt(d.slice(3, -5));
+  const day = parseInt(d.slice(0, 2));
+
+  return { year, month, day };
+}
+
+posts.sort((a, b) => {
+  const x = parseDate(a.data.publishDate);
+  const y = parseDate(b.data.publishDate);
+
+  const dYear = x.year - y.year;
+  const dMonth = x.month - y.month;
+  const dDay = x.day - y.day;
+
+  if (dYear !== 0) {
+    return dYear;
+  }
+
+  if (dMonth !== 0) {
+    return dMonth;
+  }
+
+  if (dDay !== 0) {
+    return dDay;
+  }
+
+  return 0;
+}).reverse();
+
 ---
 
 <BasicLayout title="Posts">
-  <ul>
+  <ul class="space-y-2">
     {
       posts
-        .filter(({data: {isDraft}}) => !isDraft)
+        .filter(({data: {isDraft}}) => !isDraft || import.meta.env.DEV)
         .map(({ id, data: { title } }) => (
         <li>
           <PostEntry title={title} id={id} />

@@ -5,7 +5,6 @@ interface Props {
 }
 
 import NavigationBar from '../components/NavigationBar/NavigationBar.astro';
-import { classes } from '../utils/classes';
 const { title, mainClass } = Astro.props;
 ---
 
@@ -22,7 +21,7 @@ const { title, mainClass } = Astro.props;
   </head>
   <body class="flex flex-col items-center gap-6 py-6 mb-12">
     <NavigationBar />
-    <main class={classes('max-w-3xl w-full p-8 bg-white', mainClass)}>
+    <main class:list={['max-w-3xl w-full p-8 bg-white', mainClass]}>
       <slot />
     </main>
   </body>
