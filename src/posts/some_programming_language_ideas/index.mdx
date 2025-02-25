@@ -229,7 +229,8 @@ Assume you have a language like Wuffs that can guarantee compile time safety for
 This safety does come at a cost.
 In order to guarantee that an addition will not overflow you need to check that the integer is below a certain value, for example.
 Or to be sure that indexing an array will not be out of bounds you need to check the index value.
-For this last case Rust enables out of bounds access checks for `Vec`s in debug builds, but disables them for release builds.
+~For this last case Rust enables out of bounds access checks for `Vec`s in debug builds, but disables them for release builds.~
+(This is not true 🙈 I got corrected by [kibwen](https://news.ycombinator.com/item?id=43171996))
 
 What you could do is introduce a special function called `assume` that can be given a predicate and
 the compiler will pretend that you did the necessary checks to make the predicate true.
@@ -248,3 +249,9 @@ But you can more easily find the bug because all your assumptions have been writ
 For debug builds you can turn the calls to `assume` into `assert` and find the problem.
 
 `assume` is essentially a `debug_assert` except that it also ties in to the flow typing of the language.
+
+---
+
+[Comments on Hacker News](https://news.ycombinator.com/item?id=43128609)
+
+Thanks for the comments!
