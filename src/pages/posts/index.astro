@@ -42,7 +42,7 @@ posts.sort((a, b) => {
   <ul class="space-y-2">
     {
       posts
-        .filter(({data: {isDraft}}) => !isDraft || import.meta.env.DEV)
+        .filter(({data: {isDraft}}) => !isDraft /*|| import.meta.env.DEV */)
         .map(({ id, data: { title } }) => (
         <li>
           <PostEntry title={title} id={id} />

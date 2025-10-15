@@ -19,6 +19,39 @@ const { title } = Astro.props;
     font-size: 1.3rem;
     font-weight: 600;
   }
+
+  article ol {
+    list-style-type: decimal;
+    list-style-position: inside;
+  }
+
+  article ul {
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+
+  article ul ul {
+    padding-left: 2rem;
+  }
+
+  article tbody {
+    text-align: right;
+  }
+
+  article table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+  }
+
+  article table, th, td {
+    border: solid 1px;
+  }
+
+  article th, td {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 </style>
 
 <BasicLayout title={title}>

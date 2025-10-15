@@ -1,0 +1,182 @@
+---
+title: "How much slower is a list of arrays vs an array?"
+publishDate: '22-04-2025'
+isDraft: true
+---
+
+import {Image} from 'astro:assets';
+import Link from '@/components/Link.astro';
+import branch from './branch.png';
+
+TLDR; it depends :) 
+
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+TODO
+
+## Why?
+
+I was writing a program in C with an arena as the general purpose allocator.
+Then I wanted to have a few different collections to keep track of some items.
+If I had been programming in Rust I would have used a `Vec` for this.
+However, using a `Vec`-like data structure would not have worked well in this situation.
+When a `Vec` grows beyond its current capacity, it may have to allocate a new chunk of memory and copy its contents over.
+This is wasteful if you use an arena as a backing allocator, because the old chunk of memory would not be 'freed'.
+An arena can only grow and reset to a previous point, but it cannot free individual allocations and reuse the memory.
+You can circumvent this problem by defining the `Vec`-like data structure as a linked list of chunks of memory!
+Such a data structure will be called a __list of arrays (LOA for brevity)__ in this post.
+
+I wondered if traversing a LOA would be slower, so I decided to find out!
+Also, I don't have a lot of experience in benchmarking so this seemed like a nicely constrained problem to gain some experience.
+
+## List of arrays (LOA) vs dynamic array
+
+Using a LOA has some potential downsides compared to a `Vec`.
+
+- You no longer have constant time element access.
+- Not all elements are contiguous in memory.
+
+For my case though, these points were not an issue.
+I only needed a dynamically growing collection that allowed traversal.
+
+And on the other hand, using a LOA also has some potential benefits:
+
+- Allocations are stable.
+  This means you can keep pointers (or references) to elements of a LOA and they will not be invalidated when the LOA grows.
+- Growing is likely cheaper, since you don't have to copy over your data.
+
+<Image 
+  src={branch}
+  loading="eager"
+  format="png"
+  style="align-self: end;"
+  alt=""
+/>
+
+## Method (what I did)
+
+- I create `N` 32-bit integers and sum them.
+  All integers are initialized to 1, so they should sum to `N`.
+- The different LOA test cases split up the `N` integers into `M` linked arrays.
+- For each test case the number of CPU cycles is read using the `rdtsc` instruction.
+- Each test case is ran 500 times to gain samples.
+- Before the samples are collected, the function is ran 50 times as a warmup.
+- Code is generated using clang version 17.0.1 and executed on a Windows machine with a Ryzen 9 7900X.
+    - Command is `clang -O2 -march=native -o main.exe src/main.c`.
+- I inspected the generated code to make sure the compiler did not generate totally unexpected code.
+    - This happened for `cl` (the Microsoft compiler) where it generated a vectorized implementation for `sum_array_slice`, but not for `sum_array_list`.
+      This made the code for the LOA much slower.
+      `clang` did not have this issue.
+
+```c
+typedef struct Array {
+  uint32_t len;
+  uint32_t *data;
+} Array;
+
+typedef struct ListOfArrays {
+  struct ListOfArrays *next;
+  uint32_t len;
+  uint32_t data[0];
+} ListOfArrays;
+
+uint32_t sum(uint32_t *data, uint32_t len) {
+  uint32_t s = 0;
+  for (uint32_t i = 0; i < len; i++) {
+    s += data[i];
+  }
+
+  return s;
+}
+
+uint32_t sum_array(Array *slice) {
+  return sum(slice->data, slice->len);
+}
+
+uint32_t sum_list_of_arrays(ListOfArrays *head) {
+  uint32_t s = 0;
+  while (head) {
+    s += sum(head->data, head->len);
+    head = head->next;
+  }
+
+  return s;
+}
+```
+
+## Results
+
+Overall, the results are not too surprising.
+A LOA with only 1 element per chunk is very slow compared to a regular array.
+Up to ~60(!) times slower.
+The relative slowdown for LOA traversal gets smaller as the total amount of data read grows and as the chunk size grows.
+
+<figure>
+
+| ️| 10   |   100 |   1000 | 1e4   |   1e5 |   1e6 |   1e7 |   1e8 |
+|------------|------|-------|-------|-------|-------|-------|-------|-------|
+| 1 element         | 1.04 | 16.14 | 58.71 | 42.62 | 44.95 | 37.10 | 27.21 | 13.10 |
+| 10  elements      |      |  1.85 |  7.09 |  4.90 |  5.18 |  4.37 |  3.64 |  1.62 |
+| 100 elements      |      |       |  1.90 |  1.50 |  1.56 |  1.41 |  1.62 |  0.94 |
+| 1000 elements     |      |       |       |  1.13 |  1.22 |  1.14 |  1.18 |  0.90 |
+| 1e4 elements      |      |       |       |       |  1.09 |  1.05 |  1.11 |  0.91 |
+| 1e5 elements      |      |       |       |       |       |  1.01 |  1.10 |  0.90 |
+| 1e6 elements      |      |       |       |       |       |       |  1.10 |  0.90 |
+| 1e7 elements      |      |       |       |       |       |       |       |  0.90 |
+
+<figcaption>
+  Number of cycles relative to array benchmark.
+  Each column is the total number of integers summed in that benchmark.
+  Each row indicates how many integers each link contained in that benchmark.
+</figcaption>
+
+</figure>
+
+### Benchmarking woes
+
+Benchmarking is difficult and drawing meaningful conclusions from your data is also difficult.
+
+### Something fishy... 🐟👃🏻
+
+For some reason the LOA is faster when 
+
+The first sample always takes the most time and is an outlier in that regard.
+
+## Conclusion
+
+Using a list of arrays as an alternative to dynamically allocated arrays can be useful and they don't have to be much slower in traversal.
+They are between 5-20% slower in traversal compared to an array when you pick a sufficiently large chunk size.
+Also, for most of my use cases the lists will only grow to a few links at most diminishing its downsides.
+
+And... I feel like writing a _representative_ benchmark is hard.
+On this page I display the average traversal times of varies benchmarks.
+But when I look at the samples taken for each benchmark, the first sample almost always takes the most cycles.
+Sometimes way more than the average of that benchmark.
+This happens irrespective of the number of warmup rounds.
+Is this first sample not more representative than the average if the actual usage would be a single traversal?
+
+Writing a solid benchmark is hard too.
+I don't know if using cycles taken was a good way of measuring things here, since the clock speed of my CPU is variable.
+Measuring the cache misses and branch mispredictions would have been a nice addition.
+
+## Afterthoughts
+
+What is it that makes the LOA relatively faster when the chunk size grows?
+Is it that the amount of memory to be fetched can be found easier or is it that the latency of finding the next chunk can be better hidden because it has more work to do per chunk.
+
+I am curious about why the LOA is faster for the largest benchmark.
+Very vague guesses are the best I have to explain this.
+Maybe there is something broken about my benchmark code, maybe it really is faster.
+I don't know.
