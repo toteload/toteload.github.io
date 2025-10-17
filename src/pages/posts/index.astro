@@ -2,51 +2,25 @@
 import { getCollection } from 'astro:content';
 import BasicLayout from '@/layouts/BasicLayout.astro';
 import PostEntry from '@/components/PostEntry.astro';
+import {parsePostData, comparePostDate} from '@/components/post';
 
-const posts = await getCollection('posts');
-
-function parseDate(d: string): {year: number; month: number; day: number} {
-  const year = parseInt(d.slice(-4));
-  const month = parseInt(d.slice(3, -5));
-  const day = parseInt(d.slice(0, 2));
-
-  return { year, month, day };
-}
-
-posts.sort((a, b) => {
-  const x = parseDate(a.data.publishDate);
-  const y = parseDate(b.data.publishDate);
-
-  const dYear = x.year - y.year;
-  const dMonth = x.month - y.month;
-  const dDay = x.day - y.day;
-
-  if (dYear !== 0) {
-    return dYear;
-  }
-
-  if (dMonth !== 0) {
-    return dMonth;
-  }
-
-  if (dDay !== 0) {
-    return dDay;
-  }
-
-  return 0;
-}).reverse();
-
+const postsCollection = await getCollection('posts');
+const posts = postsCollection.map(parsePostData);
 ---
 
 <BasicLayout title="Posts">
-  <ul class="space-y-2">
+  <p class="mb-6">Things that keep bouncing around in my head end up here.</p>
+  <ul style="display:grid;grid-template-columns:min-content min-content auto;gap:16px 8px;">
     {
       posts
-        .filter(({data: {isDraft}}) => !isDraft /*|| import.meta.env.DEV */)
-        .map(({ id, data: { title } }) => (
-        <li>
-          <PostEntry title={title} id={id} />
-        </li>
+        .sort((a, b) => comparePostDate(a.publishDate, b.publishDate))
+        .reverse()
+        .filter(({isDraft}) => !isDraft || import.meta.env.DEV)
+        .map(({ id, title, isDraft, publishDate, tags }) => (
+        <li
+          style="display:grid;grid-column:1/-1;grid-template-columns:subgrid;"
+          ><PostEntry title={title} id={id} isDraft={isDraft} publishDate={publishDate} tags={tags}
+        /></li>
       ))
     }
   </ul>

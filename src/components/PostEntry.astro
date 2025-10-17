@@ -1,15 +1,27 @@
 ---
+import Link from '@/components/Link.astro';
+import type { PostDate } from './post';
+import PostTags from './PostTags.astro';
+import {postDateToString} from '@/components/post';
+
 interface Props {
   title: string;
   id: string;
-  publishDate?: string;
+  publishDate: PostDate;
+  isDraft: boolean;
+  tags: string[];
 }
 
-import Link from '@/components/Link.astro';
+const { title, id, isDraft, publishDate, tags } = Astro.props;
 
-const { title, id } = Astro.props;
 ---
 
-<Link href={`/posts/${id}`}>
-  {title}
-</Link>
+<time
+  >{postDateToString(publishDate)}</time
+><span
+  >{isDraft && "🚧"}</span
+><div
+  style="display:flex;flex-direction:column;gap:4px;"
+  ><Link href={`/posts/${id}`}>{title}</Link
+  ><PostTags tags={tags} />
+</div>

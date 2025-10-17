@@ -1,8 +1,11 @@
 ---
+import PostTags from '@/components/PostTags.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
+import { parsePostData, postDateToString } from '@/components/post';
+import type {PostDate} from '@/components/post';
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection('posts');
@@ -12,28 +15,23 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
-function toDatetimeAttributeFormat(d: string) {
-    const year = d.slice(-4);
-    const month = d.slice(3, -5);
-    const day = d.slice(0, 2);
+function toDatetimeAttributeFormat({year, month, day}: PostDate) {
     return `${year}-${month}-${day}`;
 }
 
 const { post } = Astro.props;
 
-const { title, publishDate, isDraft } = post.data;
+const { title, publishDate, isDraft, tags } = parsePostData(post);
 
 const { Content } = await render(post);
 ---
 
 <PostLayout title={title}>
   <h1>{title}</h1>
-  <span>Published on <date datetime={toDatetimeAttributeFormat(publishDate)}>{publishDate}</date></span>
+  <div style="display:flex;flex-direction:column;gap:4px;">
+  <span>Published on <time datetime={toDatetimeAttributeFormat(publishDate)}>{postDateToString(publishDate)}<time></span>
+  <PostTags tags={tags} />
+  </div>
   <hr />
-  {isDraft && 
-  <Fragment>
-    <p class="text-2xl">👷🚧 THIS POST IS IN DRAFT AND A WORK IN PROGRESS 🚧</p>
-    <hr />
-  </Fragment>}
   <Content />
 </PostLayout>
