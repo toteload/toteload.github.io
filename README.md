@@ -1,3 +1,1 @@
-# davidbos.me
-
-This repository hosts my website ☺️
+This is where I host my website.

@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes"><link rel="icon" type="image/png" href="/favicon.png" sizes="16x16"><link rel="stylesheet" href="/style.css"><title>Some programming language ideas</title></head><body class="basic-main"><header class="navigation-bar"><div id="nav-status"><img id="img-default" src="/assets/post-default.png" width="48" height="48"><img id="img-hover" src="/assets/post-hover.png" width="48" height="48"></div><nav><a href="/">HOME</a><a href="/posts">POSTS</a></nav></header><main><article class="post-article"><header><h1>Some programming language ideas</h1><span id="published">Published on <time>21 February 2025</time></span></header><p>This post is me writing down some ideas for programming languages or programming language features. Mainly to get them out of my head into the world without having to write an actual compiler for them 😅 I start by providing some context and then present my ideas. Hopefully it's interesting.</p><h2>Explanations</h2><p>Here are a few short explanations and references to existing concepts that I refer to later on. The explanations are meant to give you some intuition about them if you are not at all familiar with them.</p><h3>Refinement types</h3><p>A <a class="main-link" href="https://en.wikipedia.org/wiki/Refinement_type">refinement type</a> is a type with a a predicate attached to it that holds for every value of this type.</p><p>Rust is not a language that has user-definable refinement types, but you can find some examples of refinements in the standard library, like <code>NonZero</code> and <code>NonNull</code>. The <a class="main-link" href="https://doc.rust-lang.org/std/num/struct.NonZero.html">documentation for NonZero</a> mentions that <code>NonZero</code> can result in memory optimization. For example, <code>Option&lt;NonZero&lt;u32&gt;&gt;</code> is the same size as <code>u32</code> because the compiler is able to use 0 to mean <code>None</code>. This is great! However, I think it is a shame that it is not possible to describe such optimizations ourselves. It is not uncommon to have integer variables where not every value is valid. The excess values could be used for something else, but you cannot express this.</p><h3>Strict compile time safety</h3><p><a class="main-link" href="https://github.com/google/wuffs">Wuffs</a> is a memory-safe programming language that does have refinement types. Wuffs is a small language and meant to write decoders and encoders in. It is safe with respect to buffer overflows, integer arithmetic overflows and null pointer dereferences. All these checks are done at <em>compile time</em>. For integer variables the compiler understands what values it can have and thus if addition might result in an overflow or not.</p><h3>Flow typing and union types</h3><p><a class="main-link" href="https://en.wikipedia.org/wiki/Flow-sensitive_typing">Flow-sensitive typing</a> (or flow typing) is something I came into contact with at work using <a class="main-link" href="https://www.typescriptlang.org/">TypeScript</a>. A type system with flow typing can refine the type of a variable through the flow of a program.</p><p>Below is a documented Typescript snippet to showcase flow typing and union types. You can run it in the TypeScript playground <a class="main-link" href="https://www.typescriptlang.org/play/?#code/C4TwDgpgBAcgrgWwEYQE4HlUGVioJYB2A5lALxQGIqpQA+UAzroUQNwBQ7AZnAQMbA8AewJQA7gAsAhsACSDWcAAUADwBcsKmkw58xAJRQA3uyhQA9OagBBYFGAS8DKGCGE7KqHyFwANgBMoFCgpCi0aIRpQpj0iABpGQj5oMWhpADdoAiFgUwsrQgZIAQhAzxAIYAA6TjM8LiglUEghBs9SDqgAchiWLsMTMzNLKFlRBycg1Cl+CSgAFXAIBj58MDtefzQmGf9nBxkoTz4ZqBFfECDoaOZiGryzbwIGIV8IKt8hIiUuz0mb2L9DhDKCoSpwVAEYFQAC+tXyowaqVBECkfDmE2crnc9gkEFEnjEUmc2TsAJYCReRy8p3Ol2CoUoyDQNWGVkWkBWazs-yQb3sQkYzDALikqDsrVx0Ga0AYSRS0EgqC4kQQpRCoN4gjVXjxfAA1nkRsBBVJfJ8xLinKx7MtBMQoPUpfYlmc2o7nOSHZEKDl7nUGk0lpL2p0ukzqP1jA8vCIXm8Pl8fn9PWFmaggTGwcAIVC8nCjVZZEjoGC0RjHFi3AQ7A58dSiSSIHg61EhbFfW2I2g4oXxI50YwJD4AhQIJkaNIwJBRE66y5UF9pggPeIIOaXZB-P6EQRx2hV9FingzZv3n3FFA1TN9tI7NkzuthKIIConMBnJLJIdMWfY35AhQHcRmLNcoH8PBAlJKBX2kOAmDwTILl1CADRgidLlcBg5T5aB0jFE8az7A4PH-UdgjrcY8RCbC8CIAg1RrK4LXEEdAOuM8+3RVD9RYGDUEXVAqigABNHwaXGVBLl-EAfFQBh1waJBLgQKReOIPt4HTHRbhIchuxoehegdegkCEV5UQIVlY2eOwAH1YKkeDBEyPdsIAYT1fUND3CcyCODgL1EUIwEXJVkJlQJQqXKQV1-BhhwAsc-NC9xrKeeN3k+b4ACIAHU7ygDJoFkuBwJECAAH4AEIcv0DgCwyuwQA0LTqB0jtyC6PFzSELoOG-OQFGUEB6s4EZ5krVcOQgLBVjwdYoBVGgcoAMTgNDSuEgARQVBtGW0N1KgVyqqHL2EG+RFCULgzQUmioF4fVsjEYLnDa7RsF0+qgA">here</a>.</p><code class="code-block"><pre>
+type NumberOrString = number | string;
+
+function whatIsIt(x: NumberOrString) {
+  // At this point x could be a number or a string, since we have not
+  // inspected x yet.
+
+  if (typeof x === &apos;string&apos;) {
+    // In this branch Typescript understands that x can only be a string.
+
+    console.log(&apos;x is a string&apos;);
+    return;
+  }
+
+  // If we reach this point then x was not a string, so x can only 
+  // be a number. Typescript is able to strip part of the type since
+  // we performed a runtime check to allow this; testing if the type
+  // of x is a string or not.
+
+  if (typeof x === &apos;number&apos;) {
+    console.log(&apos;x is a number&apos;);
+    return;
+  }
+
+  // If we reach this point then x was neither a string nor a number,
+  // which should never happen if the program is well typed.
+
+  // Below is an assignment to a variable with type never.
+  // never is a special type.
+  // It means that no option exists of what this type could be.
+
+  // If we did not exhaustively check every possible variant
+  // that x could be then the assignment below would be a type
+  // checking error. You can try this yourself by making
+  // NumberOrString = number | string | boolean
+  const _exhaustivenessCheck: never = x;
+
+  // In a properly typed program this should never print.
+  console.log(&quot;What have you done?!&quot;);
+}
+
+const y: NumberOrString = &apos;hello&apos;;
+whatIsIt(y);
+
+// This is TypeScript for &quot;Frick you. Just do the type cast.&quot;
+whatIsIt(false as unknown as NumberOrString);
+</pre></code><h2>Some ideas!</h2><p>Here are some ideas for features in programming languages.</p><h3>Type refinement + union types on C-like structs</h3><p>There is a <a class="main-link" href="https://morepypy.blogspot.com/2015/01/faster-more-memory-efficient-and-more.html">PyPy blog post</a> explaining their then new dictionary design (it's a post from 2015). Their design is not important here, just know that it uses an array of integers (<code>sparse_array</code>) as indices into another array (<code>compact_array</code>). The value of the indices can only be as large as the size of the dictionary (<code>num_items</code>). So, if the dictionary has fewer than 256 entries, then using 8-bit indices is sufficient. When the dictionary grows beyond this size you would need at least 16-bit integers, etc.</p><code class="code-block"><pre>
+struct dict {
+    long num_items;
+    variable_int *sparse_array;
+    dict_entry *compact_array;
+}</pre></code><p>This means that the <em>actual</em> type (a 8-bit, 16-bit or 32-bit integer) of <code>variable_int</code> depends on the value of <code>num_items</code>. You cannot express this relationship between variables in C or C++, but you could with union types and refinement.</p><code class="code-block"><pre>
+type small_dict = struct {
+    u32(0..(2**8)) num_items;
+    u8 *sparse_array;
+    dict_entry *compact_array;
+};
+
+type medium_dict = struct {
+    u32((2**8)..(2**16)) num_items;
+    u16 *sparse_array;
+    dict_entry *compact_array;
+};
+
+type big_dict = struct {
+    u32((2**16)..(2**32)) num_items;
+    u32 *sparse_array;
+    dict_entry *compact_array;
+};
+
+type dict = small_dict | medium_dict | big_dict;
+</pre></code><p>In the example the <code>dict</code> comes in three variaties with either 8-bit, 16-bit or 32-bit indices. You can differentiate between the three by inspecting the value of <code>num_items</code>. The syntax of <code>u32(lo..hi)</code> is a meant as a refinement on <code>u32</code>, where its value must lie in the range <code>lo..hi</code>. The double star <code>**</code> means "to the power of", so <code>2**8</code> is 256.</p><p>You still have to check at runtime what kind of dictionary you are dealing with, but you would have to do this anyway. This does not incur extra cost, but the compiler can check if you are not accidentally assuming you are dealing with a <code>small_dict</code> without having done the necessary checks.</p><p>Other examples that also fall into the category of different interpretation of memory depending on some bit of data are NaN-boxing and Small String Optimization (SSO).</p><p>Also, this construction can be used to implement Rust-like enums yourself! Rust enums are implemented as tagged unions (as far as I know). Tagged unions are also used in TypeScript and with flow typing you can check if all variaties are handled. No explicit compiler support has to be written for enums and exhaustiveness checking.</p><h3>Refinement based function overloading</h3><p>This is an idea I had for Rust. Or at least for a language that does some form of lifetime analysis. The example below is for Rust and shows creating a <code>Vec</code> with a capacity of 8. A few elements are pushed, a reference to an element is taken and then an attempt is made to push again.</p><code class="code-block"><pre>
+let mut a: Vec&lt;i32&gt; = Vec::with_capacity(8);
+
+a.push(1);
+a.push(2);
+a.push(3);
+
+let b: &amp;i32 = &amp;a[0];
+
+a.push(4); // &lt;- Highly illegal! You could go to jail for this (not really)
+</pre></code><p>In Rust it is illegal to hold a reference to a <code>Vec</code> element and then push an element. You are holding an immutable reference and then try to mutably borrow it. The reason you need to mutably borrow the <code>Vec</code> for a push is that the underlying data where the elements are stored might move. If a <code>Vec</code> has no space left for a new element it has to move the elements to a place with more room for new elements.</p><p>However, in this example the push will not result in such a relocation so the reference will still be valid afterwards. Even if you check that the <code>Vec</code> has spare room you are not allowed to push while holding a reference. Annoying!</p><p>If you could overload a function based on a refinement, then you could define a version of <code>push</code> that does not require a mutable borrow, and the usage would look no different! That is a big if however 😄</p><code class="code-block"><pre>
+fn push(&amp;self, x: T) where self.len &lt; self.cap {
+    // Yay, we can push x and all references are safe!
+    // ...
+}
+
+fn push(&amp;mut self, x: T) {
+    // ...
+}</pre></code><p>Even if overloading would not be possible you could still define another version of <code>push</code> that only can be called if you know that there is enough room.</p><code class="code-block"><pre>
+fn push_safe(&amp;self, x: T) where self.len &lt; self.cap {
+  // ...
+}</pre></code><h3>Refinement on memory addresses</h3><p>Alignment requirements can be expressed through refinement predicates on addresses. In the pseudocode <code>address</code> is an implicitly available variable that represents the address of a value of the type.</p><code class="code-block"><pre>
+type Int64 = [8]u8 where (address % 8 == 0); // Must be 8 byte aligned
+</pre></code><p>Maybe on some embedded systems you have ranges of memory that are reserved for certain purposes. For example, the Game Boy has 8 KiB of VRAM mapped to memory range 0x8000-0xA000. It is possible to define pointers that are only allowed to point to VRAM.</p><code class="code-block"><pre>
+type VRAMByte = u8 where (address &gt;= 0x8000 &amp;&amp; address &lt; 0xA000);
+type VRAMPointer = *VRAMByte;
+</pre></code><p>If the program is well typed, you could never accidentally read or write outside of VRAM when using a <code>VRAMPointer</code>.</p><h3>Checked bending of the rules</h3><p>Assume you have a language like Wuffs that can guarantee compile time safety for certain issues like integer arithmetic overflow. This safety does come at a cost. In order to guarantee that an addition will not overflow you need to check that the integer is below a certain value, for example. Or to be sure that indexing an array will not be out of bounds you need to check the index value. <s>For this last case Rust enables out of bounds access checks for `Vec`s in debug builds, but disables them for release builds.</s> (This is not true 🙈 I got <a class="main-link" href="https://news.ycombinator.com/item?id=43171996">corrected by kibwen</a>)</p><p>What you could do is introduce a special function called <code>assume</code> that can be given a predicate and the compiler will pretend that you did the necessary checks to make the predicate true.</p><p>When you add an assumption that turns out to not actually be true you will have introduced a bug. But you can more easily find the bug because all your assumptions have been written down in code! For debug builds you can turn the calls to <code>assume</code> into <code>assert</code> and find the problem. So, <code>assume</code> is essentially a <code>debug_assert</code> except that it also ties in to the flow typing of the language.</p></article></main><ul class="contact-information"><li><a href="https://www.github.com/toteload">Github</a></li><li><a href="mailto:me@davidbos.me">email address</a></li></ul></body></html>
