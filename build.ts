@@ -12,6 +12,7 @@ await Promise.all([
   fs.cp('assets', path.join(dist, 'assets'), {recursive: true}),
   fs.cp('style.css', path.join(dist, 'style.css')),
   fs.cp('favicon.png', path.join(dist, 'favicon.png')),
+  fs.cp('CNAME', path.join(dist, 'CNAME')),
 ]);
 
 const renderPosts = async (postsPath: string) => {
