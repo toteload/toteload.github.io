@@ -13,12 +13,14 @@ export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
           src={`/assets/${image}-default.png`}
           width="48"
           height="48"
+          style="image-rendering: pixelated;"
         />
         <Picture
           id="img-hover"
           src={`/assets/${image}-hover.png`}
           width="48"
           height="48"
+          style="image-rendering: pixelated;"
         />
       </div>
       <nav>

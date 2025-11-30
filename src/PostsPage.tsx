@@ -41,7 +41,7 @@ export const PostsPage: Component<Props> = ({postsPath}) => {
   }).reverse();
 
   return (
-    <BasicLayout title="Posts" navImage="post" >
+    <BasicLayout title="Posts - David Bos" navImage="post" >
       <p>
         This is where you can read bits of my writing.
         Most recent posts are at the top.

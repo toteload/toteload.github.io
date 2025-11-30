@@ -46,7 +46,7 @@ const dateToHumanReadable = (date: Date): string => {
 
 export const Post: Component<Post> = ({meta, Content}) => {
   return (
-    <BasicLayout title={meta.title} navImage="post">
+    <BasicLayout title={`${meta.title} - David Bos`} navImage="post">
       <article class="post-article">
         <header>
           <h1>{meta.title}</h1>
