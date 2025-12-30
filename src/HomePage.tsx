@@ -3,7 +3,10 @@ import { Picture } from './components';
 
 export const HomePage: Component = () => {
   return (
-    <BasicLayout title="David Bos">
+    <BasicLayout
+      title="David Bos"
+      description="Hello, my name is David Bos and this is my website! I am a professional programmer with wide interests such as video games, visual arts, puzzles, optimization, graphics programming, compilers and interpreters. Allround nerd 🤓."
+      >
       <Picture
         src="assets/me.png"
         width="275"

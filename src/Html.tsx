@@ -1,14 +1,18 @@
 export interface HeadProps {
   title: string;
+  description?: string;
 }
 
-export const Head: Component<PropsWithChildren<HeadProps>> = ({title, children}) => {
+export const Head: Component<PropsWithChildren<HeadProps>> = ({title, description, children}) => {
   return (
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes" />
+      {description ? <meta name="description" content={description} /> : undefined}
       <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16" />
       <link rel="stylesheet" href="/style.css" />
+      <link rel="preconnect" href="/assets/NotoSetif-Regular-smol.woff2" />
+      <link rel="preconnect" href="/assets/NotoSetif-Bold-smol.woff2" />
       <title>{title}</title>
       {children}
     </head>

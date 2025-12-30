@@ -11,6 +11,7 @@ export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
         <Picture
           id="img-default"
           src={`/assets/${image}-default.png`}
+          alt=""
           width="48"
           height="48"
           style="image-rendering: pixelated;"
@@ -18,6 +19,7 @@ export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
         <Picture
           id="img-hover"
           src={`/assets/${image}-hover.png`}
+          alt=""
           width="48"
           height="48"
           style="image-rendering: pixelated;"

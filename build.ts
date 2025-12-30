@@ -44,3 +44,5 @@ await Promise.all([
   Bun.write(path.join(dist, 'posts', 'index.html'), PostsPage({postsPath: 'src/posts'})),
   renderPosts('src/posts'),
 ]);
+
+console.log('Done!');
