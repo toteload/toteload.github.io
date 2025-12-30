@@ -11,8 +11,8 @@ export const Head: Component<PropsWithChildren<HeadProps>> = ({title, descriptio
       {description ? <meta name="description" content={description} /> : undefined}
       <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16" />
       <link rel="stylesheet" href="/style.css" />
-      <link rel="preconnect" href="/assets/NotoSetif-Regular-smol.woff2" />
-      <link rel="preconnect" href="/assets/NotoSetif-Bold-smol.woff2" />
+      <link rel="preload" href="/assets/NotoSerif-Regular-smol.woff2" as="font" type="font/woff2" />
+      <link rel="preload" href="/assets/NotoSerif-Bold-smol.woff2" as="font" type="font/woff2" />
       <title>{title}</title>
       {children}
     </head>
