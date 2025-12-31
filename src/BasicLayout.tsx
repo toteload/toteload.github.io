@@ -13,9 +13,11 @@ export const BasicLayout: Component<PropsWithChildren<Props>> = ({title, descrip
       <Head title={title} description={description} />
       <Body className="basic-main">
         <NavigationBar image={navImage} />
-        <main>
-          {children}
-        </main>
+        <div>
+          <main>
+            {children}
+          </main>
+        </div>
         <ContactInformation />
       </Body>
     </Html>

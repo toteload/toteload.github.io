@@ -50,15 +50,16 @@ a {
   flex-direction: column;
   gap: 16px;
   align-items: center;
-
   padding: 8px 0;
 
   main {
+    margin: auto;
     padding: 0 8px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     line-height: 1.5;
+    max-width: 75ch;
   }
 
   > * {
