@@ -15,6 +15,7 @@ The game shows you some of your statistics like WPM (words per minute) and your 
 Accuracy tells you what percentage of your keystrokes was correct.
 This got me thinking about accuracy and made me realize that it is not always a very useful metric in its usual form.
       </p>
+<h2>A better format</h2>
       <p>
 When it comes to typing accuracy it is more useful to display accuracy as how many keystrokes somebody types correctly before making a mistake.
 So, <em>1 error per N keystrokes</em>.
@@ -39,6 +40,7 @@ The reason for this behavior is that accuracy is the <em>inverse</em> of what yo
 Let <Math>S</Math> be the total number of keystrokes (both correct and incorrect) and <Math>E</Math> the number of incorrect keystrokes.
 Accuracy is is then <Math>1 - E/S</Math>, and the <Math>N</Math> of our format is <Math>S/E</Math>: basically the inverse.
 </p>
+  <h2>Something similar</h2>
 <p>
 Another situtation where an inverse is more useful is the usage of frame rate or FPS (frames per second) for tracking video game performance.
 If you are tasked with optimizing a game you want to track the <em>frame time</em>, not frame rate.
