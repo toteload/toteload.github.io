@@ -17,7 +17,7 @@ This got me thinking about accuracy and made me realize that it is not always a 
       </p>
       <p>
 When it comes to typing accuracy it is more useful to display accuracy as how many keystrokes somebody types correctly before making a mistake.
-So, 1 error per N keystrokes.
+So, <em>1 error per N keystrokes</em>.
       </p>
       <p>
 Below I have listed a few accuracy values and their equivalents in this alternative format, so you can get a feeling for it.
@@ -40,10 +40,13 @@ Let <Math>S</Math> be the total number of keystrokes (both correct and incorrect
 Accuracy is is then <Math>1 - E/S</Math>, and the <Math>N</Math> of our format is <Math>S/E</Math>: basically the inverse.
 </p>
 <p>
-Another situtation where an inverse is more useful is the usage of fps (frames per second) for tracking video game performance.
-If you are tasked with optimizing a game you want to track the frame time, not fps.
-Similar to the typing accuracy where improving by 1 keystroke does not always result in the same accuracy percentage improvement, shaving 1ms of your frame time does not always result in the same fps increase.
-  As an example, we start with a frame time of 100ms = 10fps. We manage to shave of 40ms, giving us a frame time of 60ms = 16.7fps; a difference of 6.7fps. But, if we started with a frame time of 50ms = 20fps and we shave the same 40ms we get 10ms = 100fps; a difference of 80fps!
+Another situtation where an inverse is more useful is the usage of frame rate or FPS (frames per second) for tracking video game performance.
+If you are tasked with optimizing a game you want to track the <em>frame time</em>, not frame rate.
+Similar to the typing accuracy where improving by 1 keystroke does not always result in the same accuracy percentage improvement, shaving 1ms of your frame time does not always result in the same frame rate improvement.
+As an example, we start with a frame time of 100 ms = 10 FPS.
+We manage to shave of 40 ms, giving us a frame time of 60 ms = 16.7 FPS; a difference of 6.7 FPS.
+But, if we started with a frame time of 50 ms = 20 FPS and we shave off the same 40 ms we get 10 ms = 100 FPS; a difference of 80 FPS.
+A seemingly much greater improvement, even though the changes were the same.
 </p>
     </>
   );

@@ -5,6 +5,8 @@ function extToContentType(ext: string): string {
   switch (ext) {
     case '.woff2': return 'application/font-woff2';
     case '.png': return 'image/png';
+    case '.mp3': return 'audio/mpeg';
+    case '.js': return 'text/javascript';
     default: throw new Error(`Unrecognized file extension ${ext}`);
   }
 }
@@ -27,6 +29,14 @@ const server = Bun.serve({
       // TODO Insert the port of the server into the page here
       const { HomePage } = require('src/HomePage');
       const html = HomePage();
+      return new Response(
+        html,
+        {headers: {'Content-Type': 'text/html; charset=utf-8'}}
+      );
+    },
+    '/stress': () => {
+      const { StressfullAmbiencePage } = require('src/StressfullAmbiencePage');
+      const html = StressfullAmbiencePage();
       return new Response(
         html,
         {headers: {'Content-Type': 'text/html; charset=utf-8'}}
