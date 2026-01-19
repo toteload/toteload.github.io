@@ -7,6 +7,10 @@ export interface NavigationBarProps {
 export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
   return (
     <header class="navigation-bar">
+      <nav>
+        <a href="/">HOME</a>
+        <a href="/posts">POSTS</a>
+      </nav>
       <div id="nav-status">
         <Picture
           id="img-default"
@@ -25,10 +29,6 @@ export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
           style="image-rendering: pixelated;"
         />
       </div>
-      <nav>
-        <a href="/">HOME</a>
-        <a href="/posts">POSTS</a>
-      </nav>
     </header>
   );
 };

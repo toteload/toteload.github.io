@@ -1,4 +1,4 @@
-import { NavigationBar } from './components';
+import { NavigationBar, Link } from './components';
 import { Head, Body, Html } from './Html';
 
 interface Props {
@@ -18,7 +18,9 @@ export const BasicLayout: Component<PropsWithChildren<Props>> = ({title, descrip
             {children}
           </main>
         </div>
-        <ContactInformation />
+        <footer>
+          <ContactInformation />
+        </footer>
       </Body>
     </Html>
   );
@@ -27,8 +29,8 @@ export const BasicLayout: Component<PropsWithChildren<Props>> = ({title, descrip
 const ContactInformation: Component = () => {
   return (
     <ul class="contact-information">
-      <li><a href="https://www.github.com/toteload">Github</a></li>
-      <li><a href="mailto:me@davidbos.me">email address</a></li>
+      <li><Link href="https://www.github.com/toteload">Github</Link></li>
+      <li><Link href="mailto:me@davidbos.me">email address</Link></li>
     </ul>
   );
 }
