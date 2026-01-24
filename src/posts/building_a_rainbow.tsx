@@ -82,10 +82,11 @@ export const Content: Component = () => {
 <h2>Corrections</h2>
 <p>
   Actually, this image is not an accurate representation of the perceived color of each wavelength.
-  Almost no purely spectral color can be displayed with sRGB.
+  No purely spectral color can be displayed exactly with sRGB.
   After the mapping from XYZ to RGB some of the channels will be negative, but we cannot display negative RGB values.
   A little disappointing 😔
   These values I clamped to 0, so that they are as close as possible to being accurate, but they will not look the same as real monochromatic light.
+  I should also say that the error is not the same over the whole spectrum.
 </p>
 <h2>Afterthoughts</h2>
 <p>
