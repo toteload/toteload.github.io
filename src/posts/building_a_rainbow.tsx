@@ -76,7 +76,6 @@ export const Content: Component = () => {
     src="/assets/rainbow.png"
     width="471"
     height="81"
-    style="align-self: center;"
   />
 </Figure>
 <h2>Corrections</h2>

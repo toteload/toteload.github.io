@@ -1,5 +1,5 @@
 import { BasicLayout } from './BasicLayout';
-import { Picture } from './components';
+import { Picture, Link } from './components';
 
 export const HomePage: Component = () => {
   return (
@@ -24,6 +24,9 @@ export const HomePage: Component = () => {
         programming, compilers and interpreters, but also programming language
         design. But really I find almost everything game and computer related
         interesting 😄
+      </p>
+      <p>
+        You can find me on <Link href="https://www.github.com/toteload">Github</Link> or contact me via <Link href="mailto:me@davidbos.me">email</Link>.
       </p>
     </BasicLayout>
   );

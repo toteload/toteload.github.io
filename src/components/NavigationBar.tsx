@@ -8,8 +8,8 @@ export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
   return (
     <header class="navigation-bar">
       <nav>
-        <a href="/">HOME</a>
-        <a href="/posts">POSTS</a>
+        <a href="/">About me</a>
+        <a href="/posts">Posts</a>
       </nav>
       <div id="nav-status">
         <Picture

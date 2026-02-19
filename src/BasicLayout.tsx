@@ -13,24 +13,10 @@ export const BasicLayout: Component<PropsWithChildren<Props>> = ({title, descrip
       <Head title={title} description={description} />
       <Body className="basic-main">
         <NavigationBar image={navImage} />
-        <div>
-          <main>
-            {children}
-          </main>
-        </div>
-        <footer>
-          <ContactInformation />
-        </footer>
+        <main>
+          {children}
+        </main>
       </Body>
     </Html>
-  );
-}
-
-const ContactInformation: Component = () => {
-  return (
-    <ul class="contact-information">
-      <li><Link href="https://www.github.com/toteload">Github</Link></li>
-      <li><Link href="mailto:me@davidbos.me">email address</Link></li>
-    </ul>
   );
 }

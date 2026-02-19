@@ -25,6 +25,7 @@ const server = Bun.serve({
         {headers: {'Content-Type': contentType}}
       );
     },
+    '/favicon.png': Bun.file("./favicon.png"),
     '/': () => {
       // TODO Insert the port of the server into the page here
       const { HomePage } = require('src/HomePage');
