@@ -1,7 +1,7 @@
 import { Link, CodeBlock, Picture, Figure } from '../components';
 
 export const meta = {
-  title: '🌈 Building a rainbow',
+  title: 'Building a rainbow',
   publishDate: '16-01-2026',
   published: { day: 16, month: 1, year: 2026, },
   blurb: 'How to generate an image of the visible color spectrum from human color vision data.',
