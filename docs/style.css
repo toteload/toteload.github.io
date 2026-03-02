@@ -151,7 +151,7 @@ a {
 .post-article {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 
   h1 {
     font-size: 40px;
@@ -162,6 +162,7 @@ a {
 
   h2, h3 {
     margin-top: 16px;
+    margin-bottom: -8px;
   }
 
   em {

@@ -25,8 +25,7 @@ const xs: number[] = [];
 nothing_wrong_here(xs);
 console.log(\`My favorite number is $\{xs[0]}\`);`} />
     <p>
-    In Typescript, a <code>number</code> is a subtype of <code>(number|string)</code> and 
-    <code>number[]</code> is a subtype of <code>(number|string)[]</code>, because 
+    In Typescript, a <code>number</code> is a subtype of <code>(number|string)</code> and <code>number[]</code> is a subtype of <code>(number|string)[]</code>, because 
     arrays are <em>covariant</em>.
     If <code>A</code> is a subtype of <code>B</code> and a type <code>{esc('T<A>')}</code>
     is a subtype of <code>{esc('T<B>')}</code> then <code>T</code> is covariant.
