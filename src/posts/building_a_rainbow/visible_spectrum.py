@@ -212,18 +212,15 @@ def render_spectrum():
     XYZ_white = eval_spd(xyz_cmf, spd_d65)
     XYZ_white /= XYZ_white[1]
 
-    #white = np.array([1.0, 1.0, 1.0])
+    RGB_white = np.array([1.0, 1.0, 1.0])
 
     for i, xyz in enumerate(xyz_cmf):
         spd = len(xyz_cmf) * [0.0]
-        spd[i] = 0.1
+        spd[i] = 1.0
 
         XYZ_spectral = eval_spd(xyz_cmf, np.array(spd))
 
-        c = calculate_alpha(XYZ_white, XYZ_spectral) 
-        IPT = c * XYZ_to_IPT(XYZ_white) + (1 - c) * XYZ_to_IPT(XYZ_spectral)
-        XYZ = IPT_to_XYZ(IPT)
-        RGB = XYZ_to_RGB(XYZ)
+        RGB = 0.11 * RGB_white + 0.125 * XYZ_to_RGB(XYZ_spectral)
 
         if any(a < 0 or a > 1 for a in RGB):
             print("out of gamut: ", RGB)
@@ -234,7 +231,7 @@ def render_spectrum():
             pixels[i,y] = tuple(int(x * 255) for x in RGB)
 
         for y in range(height, height + 20):
-            RGB = RGB_to_sRGB(XYZ_to_RGB(c * XYZ_white))
+            RGB = RGB_to_sRGB(0.1 * RGB_white)
             pixels[i,y] = tuple(int(x * 255) for x in RGB)
 
     img.save('spectrum.png')
