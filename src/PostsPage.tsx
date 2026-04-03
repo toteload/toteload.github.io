@@ -58,7 +58,11 @@ type PostEntryProps = {
   url: string;
 } & PostMetaData;
 
-const PostEntry: Component<PostEntryProps> = ({as: Tag, url, title, publishDate, blurb}) => {
+const PostEntry: Component<PostEntryProps> = ({as: Tag, url, title, publishDate, blurb, exclude}) => {
+  if (exclude) {
+    return null;
+  }
+
   return (
     <Tag class="post-entry">
       <a href={url}>{title}</a>

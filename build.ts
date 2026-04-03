@@ -28,8 +28,8 @@ const renderPosts = async (postsPath: string) => {
 
     const filename = path.join(postsPath, f.name);
     const { meta, Content } = require(Bun.pathToFileURL(filename).href);
-    if (meta.isDraft) {
-      console.log(`${f.name} is in draft. Skipping...`);
+    if (meta.exclude) {
+      console.log(`  ${f.name} is excluded. Skipping...`);
       continue;
     }
     const p = Bun.write(path.join(dist, 'posts', path.basename(f.name, '.tsx')) + '.html', Post({meta, Content}));

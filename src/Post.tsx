@@ -10,8 +10,8 @@ export interface PostMetaData {
   title: string;
   publishDate: string;
   published: Date;
-  isDraft?: boolean;
   blurb: string;
+  exclude?: true;
   tags?: string[];
 }
 
