@@ -1,10 +1,10 @@
-import { Picture } from './Picture';
+import { Picture } from "./Picture.tsx";
 
 export interface NavigationBarProps {
-  image: 'home' | 'post';
+  image: "home" | "post";
 }
 
-export const NavigationBar: Component<NavigationBarProps> = ({image}) => {
+export const NavigationBar: Component<NavigationBarProps> = ({ image }) => {
   return (
     <header class="navigation-bar">
       <nav>

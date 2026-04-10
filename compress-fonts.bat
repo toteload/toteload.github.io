@@ -1,6 +1,6 @@
 @echo off
 
-pushd assets
+pushd assets\assets
 
 fonttools subset NotoSerif-Regular.woff2 ^
   --unicodes-file=unicodes.txt ^

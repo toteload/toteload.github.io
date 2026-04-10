@@ -1,4 +1,4 @@
-import { BasicLayout } from './BasicLayout';
+import { BasicLayout } from "./BasicLayout.tsx";
 
 interface Date {
   day: number;
@@ -8,33 +8,45 @@ interface Date {
 
 export interface PostMetaData {
   title: string;
-  publishDate: string;
   published: Date;
   blurb: string;
   exclude?: true;
   tags?: string[];
 }
 
-export interface Post {
+export interface PostProps {
   meta: PostMetaData;
   Content: Component;
 }
 
 const monthName = (month: number): string => {
   switch (month) {
-    case 1: return 'January';
-    case 2: return 'February';
-    case 3: return 'March';
-    case 4: return 'April';
-    case 5: return 'May';
-    case 6: return 'June';
-    case 7: return 'July';
-    case 8: return 'August';
-    case 9: return 'September';
-    case 10: return 'October';
-    case 11: return 'November';
-    case 12: return 'December';
-    default: throw new Error(`Invalid month number ${month}`);
+    case 1:
+      return "January";
+    case 2:
+      return "February";
+    case 3:
+      return "March";
+    case 4:
+      return "April";
+    case 5:
+      return "May";
+    case 6:
+      return "June";
+    case 7:
+      return "July";
+    case 8:
+      return "August";
+    case 9:
+      return "September";
+    case 10:
+      return "October";
+    case 11:
+      return "November";
+    case 12:
+      return "December";
+    default:
+      throw new Error(`Invalid month number ${month}`);
   }
 };
 
@@ -45,13 +57,15 @@ const dateToHumanReadable = (date: Date): string => {
   return `${day} ${month} ${year}`;
 };
 
-export const Post: Component<Post> = ({meta, Content}) => {
+export const Post: Component<PostProps> = ({ meta, Content }) => {
   return (
     <BasicLayout title={`${meta.title} - David Bos`} navImage="post">
       <article class="post-article">
         <header>
           <h1>{meta.title}</h1>
-          <span id="published">Published on <time>{dateToHumanReadable(meta.published)}</time></span>
+          <span id="published">
+            Published on <time>{dateToHumanReadable(meta.published)}</time>
+          </span>
         </header>
         <Content />
       </article>

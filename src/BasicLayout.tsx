@@ -1,13 +1,18 @@
-import { NavigationBar, Link } from './components';
-import { Head, Body, Html } from './Html';
+import {
+  NavigationBar,
+  type NavigationBarProps,
+} from "./components/index.tsx";
+import { Body, Head, Html } from "./Html.tsx";
 
 interface Props {
   title: string;
   description?: string;
-  navImage?: NavigationBarProps['image'];
+  navImage?: NavigationBarProps["image"];
 }
 
-export const BasicLayout: Component<PropsWithChildren<Props>> = ({title, description, navImage = 'home', children}) => {
+export const BasicLayout: Component<PropsWithChildren<Props>> = (
+  { title, description, navImage = "home", children },
+) => {
   return (
     <Html>
       <Head title={title} description={description} />
@@ -19,4 +24,4 @@ export const BasicLayout: Component<PropsWithChildren<Props>> = ({title, descrip
       </Body>
     </Html>
   );
-}
+};

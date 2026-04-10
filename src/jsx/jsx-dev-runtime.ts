@@ -1,29 +1,32 @@
 function isVoidElement(tag: string): boolean {
   const tags = [
-    'area',
-    'base',
-    'br',
-    'col',
-    'embed',
-    'hr',
-    'img',
-    'input',
-    'link',
-    'meta',
-    'param',
-    'source',
-    'track',
-    'wbr',
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr",
   ];
 
   return tags.includes(tag);
 }
 
 export function jsxDEV(
-  tag: string | Component, 
-  props: PropsWithChildren, 
-  ...rest: any[]): string 
-{
+  tag: string | Component,
+  props: PropsWithChildren,
+  _key?: string,
+  _isStaticChildren: boolean,
+  _source?: {filename: string; lineNumber: number; columnNumber: number},
+  _self?: unknown,
+): string {
   if (typeof tag === "function") {
     return tag(props);
   }
@@ -37,7 +40,7 @@ export function jsxDEV(
 
   let attributes = "";
   for (const [attrName, val] of Object.entries(props)) {
-    if (attrName === 'children') {
+    if (attrName === "children") {
       continue;
     }
 

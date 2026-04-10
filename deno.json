@@ -1,0 +1,21 @@
+{
+  "tasks": {
+    "build": "deno run -RWE ./src/build.tsx"
+  },
+  "imports": {
+    "@/": "./src/",
+    "jsx/jsx-runtime": "./src/jsx/jsx-runtime.ts",
+    "katex": "npm:katex@^0.16.45",
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "jsx",
+    "types": ["@/global.d.ts", "@/jsx/jsx.d.ts"]
+  },
+  "lint": {
+    "include": ["src/"]
+  },
+  "fmt": {
+    "include": ["src/"]
+  }
+}
