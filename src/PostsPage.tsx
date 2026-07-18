@@ -12,12 +12,8 @@ interface Props {
 
 export const PostsPage: Component<Props> = ({ entries }) => {
   return (
-    <BasicLayout title="Posts - David Bos" navImage="post">
-      <p>
-        This is where you can read bits of my writing. Most recent posts are at
-        the top.
-      </p>
-      <ol class="posts-list">
+    <BasicLayout title="Posts - David Bos">
+      <ol class="posts-list basic-container">
         {entries.map(({ url, title, blurb }) => (
           <li class="post-entry">
             <a href={url}>{title}</a>

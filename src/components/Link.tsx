@@ -1,3 +1,5 @@
+import { Icon } from "./Icon.tsx";
+
 export interface LinkProps {
   href?: string;
 }
@@ -5,5 +7,11 @@ export interface LinkProps {
 export const Link: Component<PropsWithChildren<LinkProps>> = (
   { children, href },
 ) => {
-  return <a class="main-link" href={href}>{children}</a>;
+  const isExternal = href[0] != "/";
+  return (
+    <a class="main-link" href={href}>
+      {children}
+      {isExternal ? <Icon name="open-in-new" fillColor="var(--base-dark)" /> : null}
+    </a>
+  );
 };

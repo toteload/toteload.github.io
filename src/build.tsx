@@ -91,9 +91,30 @@ async function copyAssets() {
   ]);
 }
 
+async function emptyDir(dir: string) {
+  // Clear the directory's contents rather than removing the directory itself.
+  // On WSL2/Windows-drive mounts, unlinking the directory inode fails with
+  // EBUSY/EACCES when a Windows process holds a handle to it.
+  let entries: string[];
+  try {
+    entries = await fs.readdir(dir);
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === "ENOENT") {
+      await fs.mkdir(dir, { recursive: true });
+      return;
+    }
+    throw e;
+  }
+
+  await Promise.all(
+    entries.map((entry) =>
+      fs.rm(path.join(dir, entry), { recursive: true, force: true })
+    ),
+  );
+}
+
 async function build() {
-  await fs.rm(outputDir, { recursive: true, force: true });
-  await fs.mkdir(outputDir);
+  await emptyDir(outputDir);
 
   await Promise.all([
     fs.writeFile(path.join(outputDir, "index.html"), <HomePage />),

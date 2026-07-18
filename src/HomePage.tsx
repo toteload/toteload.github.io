@@ -7,30 +7,27 @@ export const HomePage: Component = () => {
       title="David Bos"
       description="Hello, my name is David Bos and this is my website! I am a professional programmer with wide interests such as video games, visual arts, puzzles, optimization, graphics programming, compilers and interpreters. Allround nerd 🤓."
     >
-      <Picture
-        src="assets/me.png"
-        width="275"
-        height="231"
-        alt="Simple drawing of my face with a big nose"
-        style="image-rendering: pixelated; align-self: center; margin: 24px;"
-      />
-      <p>
-        Hello, my name is David Bos and this is my website! The drawing is an
-        artistic rendition of me. The receding hairline is accurate, but my nose
-        is not actually that big in real life. It's even bigger.
-      </p>
-      <p>
-        I like video games, visual art, programming, puzzles and everything in
-        between. Programming-wise my interests are mainly graphics- and game
-        programming, compilers and interpreters, but also programming language
-        design. But really I find almost everything game and computer related
-        interesting 😄
-      </p>
-      <p>
-        You can find me on{" "}
-        <Link href="https://www.github.com/toteload">Github</Link>{" "}
-        or contact me via <Link href="mailto:me@davidbos.me">email</Link>.
-      </p>
+      <div class="basic-container home-container">
+        <Picture
+          src="assets/me.png"
+          width="275"
+          height="231"
+          alt="Simple drawing of my face with a big nose"
+          style="image-rendering: pixelated; align-self: center; margin: 24px;"
+        />
+        <p>
+          Hello, my name is David Bos and this is my website! The drawing is an
+          artistic rendition of me. The receding hairline is accurate, but my nose
+          is not actually that big in real life. It's even bigger.
+        </p>
+        <p>
+          I like video games, visual art, programming, puzzles and everything in
+          between. Programming-wise my interests are mainly graphics- and game
+          programming, compilers and interpreters, but also programming language
+          design. But really I find almost everything game and computer related
+          interesting 😄
+        </p>
+      </div>
     </BasicLayout>
   );
 };

@@ -4,4 +4,4 @@ export * from "./Figure.tsx";
 export * from "./Picture.tsx";
 export * from "./Gallery.tsx";
 export * from "./CodeBlock.tsx";
-export * from "./NavigationBar.tsx";
+export * from "./Icon.tsx";
