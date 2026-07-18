@@ -22,7 +22,7 @@ export interface IconProps {
   fillColor?: string;
 }
 
-export const Icon: Component<IconProps> = ({ name, width="", height="", fillColor="currentColor" }) => {
+export const Icon: Component<IconProps> = ({ name, width="0", height="0", fillColor="currentColor" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
