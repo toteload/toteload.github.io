@@ -87,8 +87,9 @@ p {
 }
 
 .main-link {
-  color: var(--base-blue);
-  text-decoration-thickness: 0;
+  color: var(--base-dark);
+  text-decoration-color: var(--base-blue);
+  text-decoration-thickness: 2px;
 }
 
 .main-link svg {
@@ -99,7 +100,7 @@ p {
 }
 
 .main-link:hover {
-  text-decoration-thickness: 2px;
+  color: var(--base-blue);
 }
 
 /* -- Basic layout ---------------------------------------------------------- */
@@ -189,16 +190,12 @@ footer {
   width: auto;
   vertical-align: middle;
   margin: 0 0.5rem;
-  margin-top: -0.125rem;
 }
 
 .footer-content a {
   color: var(--base-light);
-  text-decoration-thickness: 0;
-}
-
-.footer-content a:hover {
   text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
 }
 
 /* -- Hover picture --------------------------------------------------------- */
@@ -300,7 +297,7 @@ footer {
 
   ul {
     list-style-type: disc;
-    padding-left: 16px;
+    padding-left: 24px;
   }
 
   code {

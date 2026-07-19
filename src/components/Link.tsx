@@ -11,7 +11,7 @@ export const Link: Component<PropsWithChildren<LinkProps>> = (
   return (
     <a class="main-link" href={href}>
       {children}
-      {isExternal ? <Icon name="open-in-new" fillColor="var(--base-dark)" /> : null}
+      {isExternal ? <Icon name="open-in-new" /> : null}
     </a>
   );
 };
