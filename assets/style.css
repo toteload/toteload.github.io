@@ -4,8 +4,8 @@
   --base-blue: #3453FF;
   --base-blue-dark: #143573;
   --base-red: #FA284B;
-  --base-yellow: #F9A77C;
-  --base-yellow-2: #FFF2D7;
+  --base-orange: #F9A77C;
+  --base-yellow: #FFF2D7;
   --content-width: 50rem;
   --text-block-width: 45rem;
 }
@@ -74,7 +74,7 @@ html {
 }
 
 body {
-  background-color: var(--base-light);
+  background-color: white;
 }
 
 ul, ol {
@@ -173,7 +173,7 @@ footer {
 .footer-body {
   padding: 3rem 1rem;
   background-color: var(--base-blue);
-  color: var(--base-light);
+  color: white;
 }
 
 .footer-content {
@@ -193,7 +193,7 @@ footer {
 }
 
 .footer-content a {
-  color: var(--base-light);
+  color: white;
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
 }
@@ -305,7 +305,8 @@ footer {
     border-radius: 4px;
     font-size: 1rem;
     font-family: "Roboto Mono";
-    background-color: var(--base-yellow-2);
+    background-color: var(--base-light);
+    border: solid 1px var(--base-yellow);
   }
 
   pre {
@@ -326,7 +327,6 @@ footer {
     padding: 8px;
     overflow-x: auto;
     padding-bottom: calc(4px + 1rem);
-    border: solid 1px var(--base-dark);
   }
 }
 
