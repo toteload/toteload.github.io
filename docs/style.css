@@ -171,22 +171,20 @@ footer {
 }
 
 .footer-body {
-  padding: 3rem 1rem;
+  padding: 1rem 1rem;
   background-color: var(--base-blue);
   color: white;
 }
 
 .footer-content {
   display: flex;
-  flex-direction: column;
-  margin: auto;
-  gap: 1rem;
+  gap: 2rem;
   width: 100%;
   max-width: var(--content-width);
 }
 
 .footer-content svg {
-  height: 1.5rem;
+  height: 1.25rem;
   width: auto;
   vertical-align: middle;
   margin: 0 0.5rem;
