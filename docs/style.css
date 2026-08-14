@@ -160,7 +160,7 @@ p {
 /* -- Footer ---------------------------------------------------------------- */
 
 footer {
-  margin-top: 4rem;
+  margin-top: 3rem;
   width: 100%;
 }
 
@@ -171,16 +171,18 @@ footer {
 }
 
 .footer-body {
-  padding: 1rem 1rem;
-  background-color: var(--base-blue);
+  padding: 1rem 0rem;
+  background-color: var(--base-blue-dark);
   color: white;
 }
 
 .footer-content {
   display: flex;
+  margin: auto;
   gap: 2rem;
   width: 100%;
   max-width: var(--content-width);
+  font-size: 90%;
 }
 
 .footer-content svg {
