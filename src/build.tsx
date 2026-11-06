@@ -31,7 +31,7 @@ async function getPostsData() {
       }
 
       const name = path.basename(file.name, ".tsx");
-      const url = "/posts/" + name;
+      const url = "/posts/" + name + (Deno.env.get("WWW_DEV") === "true" ? ".html" : "");
       data.push({ ...meta, url, name, Content });
     } catch (e) {
       console.error(e);

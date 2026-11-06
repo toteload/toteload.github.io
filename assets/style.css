@@ -2,7 +2,7 @@
   --base-light: #FFF9EC;
   --base-dark: #2C2B2C;
   --base-blue: #3453FF;
-  --base-blue-dark: #143573;
+  --base-blue-wave: #0c3f9c;
   --base-red: #FA284B;
   --base-orange: #F9A77C;
   --base-yellow: #FFF2D7;
@@ -172,7 +172,7 @@ footer {
 
 .footer-body {
   padding: 1rem 0rem;
-  background-color: var(--base-blue-dark);
+  background-color: var(--base-blue-wave);
   color: white;
 }
 
@@ -264,17 +264,17 @@ footer {
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     text-align: center;
     text-wrap: balance;
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   h2, h3 {

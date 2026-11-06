@@ -30,6 +30,9 @@ async function runBuild(): Promise<boolean> {
   const started = performance.now();
   const { success } = await new Deno.Command("deno", {
     args: ["run", "-RWE", "./src/build.tsx"],
+    env: {
+      "WWW_DEV": "true",
+    },
     stdout: "inherit",
     stderr: "inherit",
   }).output();
@@ -185,6 +188,7 @@ async function handler(req: Request): Promise<Response> {
   }
 
   const res = await serveDir(req, { fsRoot: OUTPUT_DIR, quiet: true });
+
   if (!(res.headers.get("content-type") ?? "").includes("text/html")) {
     return res;
   }
