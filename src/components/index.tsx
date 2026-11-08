@@ -5,3 +5,4 @@ export * from "./Picture.tsx";
 export * from "./Gallery.tsx";
 export * from "./CodeBlock.tsx";
 export * from "./Icon.tsx";
+export * from "./HoverPicture.tsx";

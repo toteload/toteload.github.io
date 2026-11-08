@@ -4,10 +4,11 @@ import { Icon } from "./components/index.tsx";
 interface Props {
   title: string;
   description?: string;
+  useMainAsContainer?: boolean;
 }
 
 export const BasicLayout: Component<PropsWithChildren<Props>> = (
-  { title, description, children },
+  { title, description, useMainAsContainer = false, children },
 ) => {
   return (
     <Html>
@@ -17,7 +18,7 @@ export const BasicLayout: Component<PropsWithChildren<Props>> = (
           <a href="/">About me</a>
           <a href="/posts">Posts</a>
         </nav>
-        <main>
+        <main class={useMainAsContainer ? "basic-container" : ""}>
           {children}
         </main>
         <footer>

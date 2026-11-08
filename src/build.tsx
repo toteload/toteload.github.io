@@ -10,14 +10,17 @@ const postsPath = "@/posts/";
 
 type Unpacked<T, F extends keyof T> = Omit<T, F> & T[F];
 
-type PostData = Unpacked<PostProps, "meta"> & { url: string; name: string };
+type PostData = PostMetaData & { url: string; name: string };
 
 async function getPostsData() {
   const baseURL = import.meta.resolve(postsPath);
   const postsDir = fileURLToPath(baseURL);
   const files = await fs.readdir(postsDir, { withFileTypes: true });
 
-  const data: PostData[] = [];
+  const IS_DEV = Deno.env.get("WWW_DEV") === "true";
+  const IS_PROD = !IS_DEV;
+
+  let data: PostData[] = [];
   for (const file of files) {
     if (!file.isFile() || path.extname(file.name) !== ".tsx") {
       continue;
@@ -25,20 +28,19 @@ async function getPostsData() {
 
     try {
       const { meta, Content } = await import(new URL(file.name, baseURL));
-
-      if (meta.exclude) {
-        continue;
-      }
-
       const name = path.basename(file.name, ".tsx");
-      const url = "/posts/" + name + (Deno.env.get("WWW_DEV") === "true" ? ".html" : "");
-      data.push({ ...meta, url, name, Content });
+      const url = "/posts/" + name + (IS_DEV ? ".html" : "");
+      data.push({ meta, url, name, Content });
     } catch (e) {
       console.error(e);
     }
   }
 
-  data.sort(({ published: a }, { published: b }) => {
+  if (IS_PROD) {
+    data = data.filter(({meta: { exclude }}) => !exclude);
+  }
+
+  data.sort(({ meta: { published: a } }, { meta: { published: b } }) => {
     if (a.year !== b.year) {
       return a.year - b.year;
     }
@@ -73,7 +75,7 @@ async function buildPosts() {
       console.log(`Generate "${props.name}"`);
       fs.writeFile(
         path.join(outputDir, "posts", `${props.name}.html`),
-        <Post meta={props} Content={props.Content} />,
+        <Post meta={props.meta} Content={props.Content} />,
       );
     }),
   ]);

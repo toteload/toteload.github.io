@@ -44,6 +44,10 @@ export function jsxDEV(
       continue;
     }
 
+    if (val === "" && attrName === "class") {
+      continue;
+    }
+
     attributes += ` ${attrName}="${val}"`;
   }
 

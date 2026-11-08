@@ -5,17 +5,17 @@ export interface HoverPictureProps {
 export const HoverPicture: Component<HoverPictureProps> = ({ kind }) => {
   return (
     <div class="hover-picture">
-      <Picture
+      <img
         class="hover-picture-default"
-        src={`/assets/${image}-default.png`}
+        src={`/assets/${kind}-default.png`}
         alt=""
         width="48"
         height="48"
         style="image-rendering: pixelated;"
       />
-      <Picture
-        id="hover-picture-hover"
-        src={`/assets/${image}-hover.png`}
+      <img
+        class="hover-picture-hover"
+        src={`/assets/${kind}-hover.png`}
         alt=""
         width="48"
         height="48"
