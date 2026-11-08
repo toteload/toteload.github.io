@@ -83,7 +83,6 @@ ul, ol {
 
 p {
   max-width: var(--text-block-width);
-  font-size: 100%; /* This size feels more equal to the code font size */
 }
 
 .main-link {
@@ -124,6 +123,11 @@ p {
   gap: 1rem;
   max-width: var(--content-width);
   margin: auto;
+
+  > * {
+    padding: 0 1rem;
+    max-width: var(--text-block-width);
+  }
 }
 
 /* -- Navigation ------------------------------------------------------------ */
@@ -248,9 +252,7 @@ footer {
 
 .post-article {
   > * {
-    padding: 0 1rem;
     width: 100%;
-    max-width: var(--text-block-width);
   }
 
   h1 {
@@ -287,7 +289,7 @@ footer {
 
   ul {
     list-style-type: disc;
-    padding-left: 24px;
+    padding-left: calc(1rem + 1rem);
   }
 
   code {
@@ -304,37 +306,39 @@ footer {
 
   .code-block {
     max-width: none;
-    padding: 1rem;
     overflow-x: auto;
+    padding: 1rem;
     padding-bottom: calc(4px + 1rem);
     display: block;
   }
 
-  pre {
+  .code-block > pre {
     font-family: inherit;
   }
 
   figure {
-    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 0.5rem;
 
     img {
       object-fit: contain;
     }
   }
-}
 
-/* -- Gallery --------------------------------------------------------------- */
+  .gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    overflow-x: scroll;
+    padding-bottom: 1rem;
+    max-width: none;
+  }
 
-.gallery {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  overflow-x: scroll;
-  padding-bottom: 16px;
-}
-
-.gallery > * {
-  flex: 0;
+  .gallery > * {
+    flex: 0;
+  }
 }
 
 /* -- CSS toggle ------------------------------------------------------------ */
