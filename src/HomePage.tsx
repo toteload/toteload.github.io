@@ -13,7 +13,7 @@ export const HomePage: Component = () => {
         width="275"
         height="231"
         alt="Simple drawing of my face with a big nose"
-        style="image-rendering: pixelated; align-self: center; margin-bottom: 24px;"
+        style="image-rendering: pixelated; align-self: center; margin-bottom: 24px; padding:0;"
       />
       <p>
         Hello, my name is David Bos and this is my website! The drawing is an
