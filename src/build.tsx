@@ -5,7 +5,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const outputDir = "./docs";
+const IS_DEV = Deno.env.get("WWW_DEV") === "true";
+const IS_PROD = !IS_DEV;
+
+// The production site is served from ./docs. The dev server sets WWW_OUT_DIR
+// to its own directory so it never overwrites the production build.
+const outputDir = Deno.env.get("WWW_OUT_DIR") ?? "./docs";
 const postsPath = "@/posts/";
 
 type Unpacked<T, F extends keyof T> = Omit<T, F> & T[F];
@@ -16,9 +21,6 @@ async function getPostsData() {
   const baseURL = import.meta.resolve(postsPath);
   const postsDir = fileURLToPath(baseURL);
   const files = await fs.readdir(postsDir, { withFileTypes: true });
-
-  const IS_DEV = Deno.env.get("WWW_DEV") === "true";
-  const IS_PROD = !IS_DEV;
 
   let data: PostData[] = [];
   for (const file of files) {

@@ -1,6 +1,8 @@
 import { serveDir } from "jsr:@std/http/file-server";
 
-const OUTPUT_DIR = "./docs";
+// Kept separate from ./docs so dev builds (which include excluded posts) never
+// overwrite the production build.
+const OUTPUT_DIR = "./.dev-out";
 const WATCH_PATHS = ["./src", "./assets"];
 const PORT = 8000;
 
@@ -32,6 +34,7 @@ async function runBuild(): Promise<boolean> {
     args: ["run", "-RWE", "./src/build.tsx"],
     env: {
       "WWW_DEV": "true",
+      "WWW_OUT_DIR": OUTPUT_DIR,
     },
     stdout: "inherit",
     stderr: "inherit",
